@@ -288,7 +288,7 @@ class _SignInScreenState extends State<SignInScreen> {
   void _handleLoginUsers() async {
     hideKeyboard(context);
     Map<String, dynamic> request = {
-      'identifier': emailCont.text.trim(),
+      'email': emailCont.text.trim(),
       'password': passwordCont.text.trim(),
     };
 

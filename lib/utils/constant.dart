@@ -166,6 +166,11 @@ const IS_USER = 'user';
 const USER_STATUS_CODE = 1;
 //endregion
 
+//region  gender Type
+const USER_MALE = 'male';
+const USER_FEMALE = 'female';
+//endregion
+
 // region Package Type
 const PACKAGE_TYPE_SINGLE = 'single';
 const PACKAGE_TYPE_MULTIPLE = 'multiple';

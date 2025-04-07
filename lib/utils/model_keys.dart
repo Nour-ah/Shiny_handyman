@@ -16,7 +16,7 @@ class UserKeys {
   static String firstName = 'first_name';
   static String lastName = 'last_name';
   static String userName = 'username';
-  static String email = 'email';
+  static String email = 'identifier';
   static String password = 'password';
   static String id = 'id';
   static String userType = 'user_type';
@@ -36,6 +36,8 @@ class UserKeys {
   static String serviceAddressId = 'service_address_id';
   static String uid = 'uid';
   static String designation = 'designation';
+  static String dateOfBirth = 'age';
+  static String gender = 'gender';
   static String knownLanguages = 'known_languages';
   static String skills = 'skills';
   static String description = 'description';

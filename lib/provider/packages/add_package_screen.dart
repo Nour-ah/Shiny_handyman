@@ -86,15 +86,31 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
 
     if (isUpdate) {
       appStore.selectedServiceList.clear();
-      appStore.addAllSelectedPackageService(widget.data!.serviceList.validate());
+      appStore
+          .addAllSelectedPackageService(widget.data!.serviceList.validate());
 
       tempAttachments = widget.data!.attchments.validate();
-      imageFiles = widget.data!.attchments.validate().map((e) => File(e.url.toString())).toList();
-      packageNameCont.text = widget.data?.translations?[DEFAULT_LANGUAGE]?.name.validate() ?? "";
-      packageDescriptionCont.text = widget.data?.translations?[DEFAULT_LANGUAGE]?.description.validate() ?? "";
+      imageFiles = widget.data!.attchments
+          .validate()
+          .map((e) => File(e.url.toString()))
+          .toList();
+      packageNameCont.text =
+          widget.data?.translations?[DEFAULT_LANGUAGE]?.name.validate() ?? "";
+      packageDescriptionCont.text = widget
+              .data?.translations?[DEFAULT_LANGUAGE]?.description
+              .validate() ??
+          "";
       packagePriceCont.text = widget.data!.price.toString().validate();
-      startDateCont.text = widget.data!.startDate != null ? formatBookingDate(widget.data!.startDate.validate(), format: DATE_FORMAT_7).toString() : "";
-      endDateCont.text = widget.data!.endDate != null ? formatBookingDate(widget.data!.endDate.validate(), format: DATE_FORMAT_7).toString() : "";
+      startDateCont.text = widget.data!.startDate != null
+          ? formatBookingDate(widget.data!.startDate.validate(),
+                  format: DATE_FORMAT_7)
+              .toString()
+          : "";
+      endDateCont.text = widget.data!.endDate != null
+          ? formatBookingDate(widget.data!.endDate.validate(),
+                  format: DATE_FORMAT_7)
+              .toString()
+          : "";
       isFeature = widget.data!.isFeatured == 1 ? true : false;
       packageStatus = widget.data!.status.validate() == 1 ? ACTIVE : INACTIVE;
       if (packageStatus == ACTIVE) {
@@ -102,17 +118,22 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
       } else {
         packageStatusModel = statusListStaticData[1];
       }
-      selectedCategoryId = widget.data!.categoryId != null ? widget.data!.categoryId : selectedCategoryId;
-      selectedSubCategoryId = widget.data!.subCategoryId != null ? widget.data!.subCategoryId : selectedSubCategoryId;
+      selectedCategoryId = widget.data!.categoryId != null
+          ? widget.data!.categoryId
+          : selectedCategoryId;
+      selectedSubCategoryId = widget.data!.subCategoryId != null
+          ? widget.data!.subCategoryId
+          : selectedSubCategoryId;
 
-      isPackageTypeSingleCategory = widget.data!.packageType.validate() == PACKAGE_TYPE_SINGLE ? PACKAGE_TYPE_SINGLE : PACKAGE_TYPE_MULTIPLE;
+      isPackageTypeSingleCategory =
+          widget.data!.packageType.validate() == PACKAGE_TYPE_SINGLE
+              ? PACKAGE_TYPE_SINGLE
+              : PACKAGE_TYPE_MULTIPLE;
 
       if (widget.data?.translations?.isNotEmpty ?? false) {
-      translations = await widget.data!.translations!;
-      enTranslations = await translations[DEFAULT_LANGUAGE]!;
+        translations = await widget.data!.translations!;
+        enTranslations = await translations[DEFAULT_LANGUAGE]!;
       }
-
-
     } else {
       appStore.selectedServiceList.clear();
       packageStatus = statusListStaticData.first.key!;
@@ -122,7 +143,8 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
   }
 
   // region Select Start Date and End Date
-  void selectDateAndTime(BuildContext context, TextEditingController textEditingController, DateTime? abc) async {
+  void selectDateAndTime(BuildContext context,
+      TextEditingController textEditingController, DateTime? abc) async {
     await showDatePicker(
       context: context,
       initialDate: abc ?? currentDateTime,
@@ -140,7 +162,8 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
         finalDate = DateTime(date.year, date.month, date.day);
 
         selectedDate = date;
-        textEditingController.text = "${formatBookingDate(selectedDate.toString(), format: DATE_FORMAT_7)}";
+        textEditingController.text =
+            "${formatBookingDate(selectedDate.toString(), format: DATE_FORMAT_7)}";
         setState(() {});
       }
     });
@@ -198,7 +221,9 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                   nextFocus: packageDescriptionFocus,
                   errorThisFieldRequired: context.translate.hintRequired,
                   isValidationRequired: checkValidationLanguage(),
-                  decoration: inputDecoration(context, hint: languages.packageName, fillColor: context.scaffoldBackgroundColor),
+                  decoration: inputDecoration(context,
+                      hint: languages.packageName,
+                      fillColor: context.scaffoldBackgroundColor),
                 ),
                 24.height,
                 Observer(builder: (context) {
@@ -206,16 +231,23 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                     width: context.width(),
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-                    decoration: boxDecorationWithRoundedCorners(backgroundColor: context.scaffoldBackgroundColor),
+                    decoration: boxDecorationWithRoundedCorners(
+                        backgroundColor: context.scaffoldBackgroundColor),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(languages.selectService, style: secondaryTextStyle()).paddingSymmetric(horizontal: 16, vertical: 12),
+                            Text(languages.selectService,
+                                    style: secondaryTextStyle())
+                                .paddingSymmetric(horizontal: 16, vertical: 12),
                             TextButton(
-                              child: Text(appStore.selectedServiceList.isNotEmpty ? context.translate.lblEdit : languages.hintAddService, style: boldTextStyle()),
+                              child: Text(
+                                  appStore.selectedServiceList.isNotEmpty
+                                      ? context.translate.lblEdit
+                                      : languages.hintAddService,
+                                  style: boldTextStyle()),
                               onPressed: () async {
                                 Map? res = await SelectServiceScreen(
                                   categoryId: selectedCategoryId,
@@ -228,11 +260,13 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                                   selectedCategoryId = res["categoryId"];
 
                                   if (res["subCategoryId"] != null) {
-                                    selectedSubCategoryId = res["subCategoryId"];
+                                    selectedSubCategoryId =
+                                        res["subCategoryId"];
                                   }
 
                                   if (res["packageType"] != null) {
-                                    isPackageTypeSingleCategory = res["packageType"];
+                                    isPackageTypeSingleCategory =
+                                        res["packageType"];
                                   }
                                 }
                                 setState(() {});
@@ -240,7 +274,8 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                             ),
                           ],
                         ),
-                        if (appStore.selectedServiceList.isNotEmpty) SelectedServiceComponent()
+                        if (appStore.selectedServiceList.isNotEmpty)
+                          SelectedServiceComponent()
                       ],
                     ),
                   );
@@ -254,16 +289,20 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                   minLines: 3,
                   maxLines: 5,
                   enableChatGPT: appConfigurationStore.chatGPTStatus,
-                  promptFieldInputDecorationChatGPT: inputDecoration(context).copyWith(
+                  promptFieldInputDecorationChatGPT:
+                      inputDecoration(context).copyWith(
                     hintText: languages.writeHere,
                     fillColor: context.scaffoldBackgroundColor,
                     filled: true,
                   ),
-                  testWithoutKeyChatGPT: appConfigurationStore.testWithoutKey == 1 ? true : false,
+                  testWithoutKeyChatGPT:
+                      appConfigurationStore.testWithoutKey == 1 ? true : false,
                   loaderWidgetForChatGPT: const ChatGPTLoadingWidget(),
                   errorThisFieldRequired: context.translate.hintRequired,
                   isValidationRequired: checkValidationLanguage(),
-                  decoration: inputDecoration(context, hint: languages.packageDescription, fillColor: context.scaffoldBackgroundColor),
+                  decoration: inputDecoration(context,
+                      hint: languages.packageDescription,
+                      fillColor: context.scaffoldBackgroundColor),
                   validator: (value) {
                     if (value!.isEmpty) return context.translate.hintRequired;
                     return null;
@@ -280,12 +319,15 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                         context,
                         hint: languages.packagePrice,
                         fillColor: context.scaffoldBackgroundColor,
-                        prefix: Text(appConfigurationStore.currencySymbol, style: primaryTextStyle(size: LABEL_TEXT_SIZE), textAlign: TextAlign.center),
+                        prefix: Text(appConfigurationStore.currencySymbol,
+                            style: primaryTextStyle(size: LABEL_TEXT_SIZE),
+                            textAlign: TextAlign.center),
                       ),
                       validator: (s) {
                         if (s!.isEmpty) return errorThisFieldRequired;
 
-                        if (s.toDouble() <= 0) return languages.priceAmountValidationMessage;
+                        if (s.toDouble() <= 0)
+                          return languages.priceAmountValidationMessage;
                         return null;
                       },
                     ).expand(),
@@ -294,11 +336,14 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                     ///StaticDataModel logic : changes in active/ inactive status
                     DropdownButtonFormField<StaticDataModel>(
                       dropdownColor: context.scaffoldBackgroundColor,
-                      value: packageStatusModel != null ? packageStatusModel : statusListStaticData.first,
+                      value: packageStatusModel != null
+                          ? packageStatusModel
+                          : statusListStaticData.first,
                       items: statusListStaticData.map((StaticDataModel data) {
                         return DropdownMenuItem<StaticDataModel>(
                           value: data,
-                          child: Text(data.value.validate(), style: primaryTextStyle()),
+                          child: Text(data.value.validate(),
+                              style: primaryTextStyle()),
                         );
                       }).toList(),
                       decoration: inputDecoration(
@@ -327,11 +372,14 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                       controller: startDateCont,
                       textFieldType: TextFieldType.OTHER,
                       focus: startDateFocus,
-                      decoration: inputDecoration(context, hint: languages.startDate, fillColor: context.scaffoldBackgroundColor),
+                      decoration: inputDecoration(context,
+                          hint: languages.startDate,
+                          fillColor: context.scaffoldBackgroundColor),
                       isValidationRequired: false,
                       onTap: () {
                         hideKeyboard(context);
-                        selectDateAndTime(context, startDateCont, currentDateTime);
+                        selectDateAndTime(
+                            context, startDateCont, currentDateTime);
                         endDateCont.text = "";
                         setState(() {});
                       },
@@ -341,7 +389,9 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                       controller: endDateCont,
                       textFieldType: TextFieldType.OTHER,
                       focus: endDateFocus,
-                      decoration: inputDecoration(context, hint: languages.endDate, fillColor: context.scaffoldBackgroundColor),
+                      decoration: inputDecoration(context,
+                          hint: languages.endDate,
+                          fillColor: context.scaffoldBackgroundColor),
                       isValidationRequired: false,
                       onTap: () {
                         hideKeyboard(context);
@@ -352,21 +402,31 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
                 ),
                 24.height,
                 Container(
-                  decoration: boxDecorationDefault(color: context.scaffoldBackgroundColor, borderRadius: radius()),
+                  decoration: boxDecorationDefault(
+                      color: context.scaffoldBackgroundColor,
+                      borderRadius: radius()),
                   padding: EdgeInsets.only(left: 16, right: 4),
                   child: Theme(
                       data: ThemeData(
-                        unselectedWidgetColor: appStore.isDarkMode ? context.dividerColor : context.iconColor,
+                        unselectedWidgetColor: appStore.isDarkMode
+                            ? context.dividerColor
+                            : context.iconColor,
                       ),
                       child: CheckboxListTile(
-                        checkboxShape: RoundedRectangleBorder(borderRadius: radius(4)),
+                        checkboxShape:
+                            RoundedRectangleBorder(borderRadius: radius(4)),
                         autofocus: false,
                         activeColor: context.primaryColor,
-                        checkColor: appStore.isDarkMode ? context.iconColor : context.cardColor,
+                        checkColor: appStore.isDarkMode
+                            ? context.iconColor
+                            : context.cardColor,
                         value: isFeature,
                         contentPadding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(borderRadius: radius(), side: BorderSide(color: context.primaryColor)),
-                        title: Text(languages.hintSetAsFeature, style: secondaryTextStyle()),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: radius(),
+                            side: BorderSide(color: context.primaryColor)),
+                        title: Text(languages.hintSetAsFeature,
+                            style: secondaryTextStyle()),
                         onChanged: (bool? v) {
                           isFeature = v.validate();
                           setState(() {});
@@ -384,7 +444,8 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
   // endregion
 
   // region Action
-  Future checkValidation({required bool isSave, LanguageDataModel? code}) async {
+  Future checkValidation(
+      {required bool isSave, LanguageDataModel? code}) async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       hideKeyboard(context);
@@ -403,13 +464,14 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
         return toast(languages.pleaseSelectService);
       }
 
-      if (startDateCont.text.validate().isNotEmpty && endDateCont.text.validate().isEmpty) {
+      if (startDateCont.text.validate().isNotEmpty &&
+          endDateCont.text.validate().isEmpty) {
         return toast(languages.pleaseEnterTheEndDate);
       }
-      
+
       updateTranslation();
 
-       if (!isSave) {
+      if (!isSave) {
         appStore.setSelectedLanguage(code!);
         disposeAllTextFieldsController();
         getTranslation();
@@ -417,40 +479,41 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
         setState(() => formWidgetKey = UniqueKey());
       } else {
         await removeEnTranslations();
-       final req = _buildPackageRequest(serviceId: serviceId);
+        final req = _buildPackageRequest(serviceId: serviceId);
         await _submitPackage(req);
       }
     }
   }
   // endregion
-  
+
   //region remove en translations
-   removeEnTranslations() {
+  removeEnTranslations() {
     if (translations.containsKey(DEFAULT_LANGUAGE)) {
       translations.remove(DEFAULT_LANGUAGE);
     }
   }
 //endregion
 
-    //region Package Request
-   Map<String, dynamic> _buildPackageRequest({required String serviceId}) {
+  //region Package Request
+  Map<String, dynamic> _buildPackageRequest({required String serviceId}) {
     final req = {
-        PackageKey.packageId: widget.data != null
-            ? widget.data!.id.validate() != 0
-                ? widget.data!.id.validate()
-                : null
-            : null,
-        PackageKey.name: enTranslations.name.validate(),
-        PackageKey.description: enTranslations.description.validate(),
-        PackageKey.price: packagePriceCont.text.validate(),
-        PackageKey.startDate: startDateCont.text.validate(),
-        PackageKey.endDate: endDateCont.text.validate(),
-        if (selectedCategoryId != -1) PackageKey.categoryId: selectedCategoryId,
-        if (selectedSubCategoryId != -1) PackageKey.subCategoryId: selectedSubCategoryId,
-        PackageKey.isFeatured: isFeature ? '1' : '0',
-        PackageKey.status: packageStatus.validate() == ACTIVE ? '1' : '0',
-        PackageKey.serviceId: serviceId,
-        PackageKey.packageType: isPackageTypeSingleCategory,
+      PackageKey.packageId: widget.data != null
+          ? widget.data!.id.validate() != 0
+              ? widget.data!.id.validate()
+              : null
+          : null,
+      PackageKey.name: enTranslations.name.validate(),
+      PackageKey.description: enTranslations.description.validate(),
+      PackageKey.price: packagePriceCont.text.validate(),
+      PackageKey.startDate: startDateCont.text.validate(),
+      PackageKey.endDate: endDateCont.text.validate(),
+      if (selectedCategoryId != -1) PackageKey.categoryId: selectedCategoryId,
+      if (selectedSubCategoryId != -1)
+        PackageKey.subCategoryId: selectedSubCategoryId,
+      PackageKey.isFeatured: isFeature ? '1' : '0',
+      PackageKey.status: packageStatus.validate() == ACTIVE ? '1' : '0',
+      PackageKey.serviceId: serviceId,
+      PackageKey.packageType: isPackageTypeSingleCategory,
     };
 
     if (translations.isNotEmpty) {
@@ -461,12 +524,16 @@ class _AddPackageScreenState extends State<AddPackageScreen> {
     return req;
   }
   // endregion
-  
 
 //region submit Package API call
-Future<void> _submitPackage(Map<String, dynamic> req) async {
+  Future<void> _submitPackage(Map<String, dynamic> req) async {
     try {
-      await addPackageMultiPart(value: req, imageFile: imageFiles.where((element) => !element.path.contains('http')).toList()).then((value) {
+      await addPackageMultiPart(
+              value: req,
+              imageFile: imageFiles
+                  .where((element) => !element.path.contains('http'))
+                  .toList())
+          .then((value) {
         //
       }).catchError((e) {
         toast(e.toString());
@@ -475,23 +542,20 @@ Future<void> _submitPackage(Map<String, dynamic> req) async {
       toast(e.toString());
     }
   }
- // endregion
+  // endregion
 
-
- 
 //region Update Translation
   void updateTranslation() {
     appStore.setLoading(true);
     final languageCode = appStore.selectedLanguage.languageCode.validate();
     if (packageNameCont.text.isEmpty && packageDescriptionCont.text.isEmpty) {
       translations.remove(languageCode);
-    }
-    else {
+    } else {
       if (languageCode != DEFAULT_LANGUAGE) {
         translations[languageCode] = translations[languageCode]?.copyWith(
-          name: packageNameCont.text.validate(),
-          description: packageDescriptionCont.text.validate(),
-        ) ??
+              name: packageNameCont.text.validate(),
+              description: packageDescriptionCont.text.validate(),
+            ) ??
             MultiLanguageRequest(
               name: packageNameCont.text.validate(),
               description: packageDescriptionCont.text.validate(),
@@ -562,33 +626,42 @@ Future<void> _submitPackage(Map<String, dynamic> req) async {
         alignment: AlignmentDirectional.center,
         children: [
           Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                  8.height,
-               MultiLanguageWidget(onTap: (LanguageDataModel code) {
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              8.height,
+              MultiLanguageWidget(onTap: (LanguageDataModel code) {
                 checkValidation(isSave: false, code: code);
-             }),
-               8.height,
+              }),
+              8.height,
               SingleChildScrollView(
-                padding: EdgeInsets.only(top: 16, left: 16.0, right: 16.0, bottom: 25.0),
+                padding: EdgeInsets.only(
+                    top: 16, left: 16.0, right: 16.0, bottom: 25.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     CustomImagePicker(
                       key: uniqueKey,
                       onRemoveClick: (value) {
-                        if (tempAttachments.validate().isNotEmpty && imageFiles.isNotEmpty) {
+                        if (tempAttachments.validate().isNotEmpty &&
+                            imageFiles.isNotEmpty) {
                           showConfirmDialogCustom(
                             context,
                             dialogType: DialogType.DELETE,
                             positiveText: languages.lblDelete,
                             negativeText: languages.lblCancel,
                             onAccept: (p0) {
-                              imageFiles.removeWhere((element) => element.path == value);
+                              imageFiles.removeWhere(
+                                  (element) => element.path == value);
                               if (value.startsWith('http')) {
-                                removeAttachment(id: tempAttachments.validate().firstWhere((element) => element.url == value).id.validate());
+                                removeAttachment(
+                                    id: tempAttachments
+                                        .validate()
+                                        .firstWhere(
+                                            (element) => element.url == value)
+                                        .id
+                                        .validate());
                               }
                             },
                           );
@@ -599,7 +672,8 @@ Future<void> _submitPackage(Map<String, dynamic> req) async {
                             positiveText: languages.lblDelete,
                             negativeText: languages.lblCancel,
                             onAccept: (p0) {
-                              imageFiles.removeWhere((element) => element.path == value);
+                              imageFiles.removeWhere(
+                                  (element) => element.path == value);
                               if (isUpdate) {
                                 uniqueKey = UniqueKey();
                               }
@@ -608,7 +682,12 @@ Future<void> _submitPackage(Map<String, dynamic> req) async {
                           );
                         }
                       },
-                      selectedImages: widget.data != null ? imageFiles.validate().map((e) => e.path.validate()).toList() : null,
+                      selectedImages: widget.data != null
+                          ? imageFiles
+                              .validate()
+                              .map((e) => e.path.validate())
+                              .toList()
+                          : null,
                       onFileSelected: (List<File> files) async {
                         imageFiles = files;
                         setState(() {});
@@ -622,7 +701,8 @@ Future<void> _submitPackage(Map<String, dynamic> req) async {
                               height: 40,
                               color: context.primaryColor,
                               textStyle: boldTextStyle(color: white),
-                              width: context.width() - context.navigationBarHeight,
+                              width:
+                                  context.width() - context.navigationBarHeight,
                               onTap: appStore.isLoading
                                   ? null
                                   : () {
@@ -636,7 +716,9 @@ Future<void> _submitPackage(Map<String, dynamic> req) async {
               ).expand(),
             ],
           ),
-          Observer(builder: (_) => LoaderWidget().center().visible(appStore.isLoading)),
+          Observer(
+              builder: (_) =>
+                  LoaderWidget().center().visible(appStore.isLoading)),
         ],
       ),
     );

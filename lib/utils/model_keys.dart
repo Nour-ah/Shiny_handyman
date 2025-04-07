@@ -16,7 +16,7 @@ class UserKeys {
   static String firstName = 'first_name';
   static String lastName = 'last_name';
   static String userName = 'username';
-  static String email = 'identifier';
+  static String email = 'email';
   static String password = 'password';
   static String id = 'id';
   static String userType = 'user_type';
@@ -68,7 +68,8 @@ class BookingStatusKeys {
   static String all = BOOKING_PAYMENT_STATUS_ALL;
   static String paid = BOOKING_STATUS_PAID;
   static String pendingApproval = BOOKING_STATUS_PENDING_APPROVAL;
-  static String waitingAdvancedPayment = BOOKING_STATUS_WAITING_ADVANCED_PAYMENT;
+  static String waitingAdvancedPayment =
+      BOOKING_STATUS_WAITING_ADVANCED_PAYMENT;
 }
 
 class BookingUpdateKeys {
@@ -229,7 +230,6 @@ class HelpDeskKey {
   static String helpdeskActivityAttachment = 'helpdesk_activity_attachment_';
   static String attachmentCount = 'attachment_count';
 }
-
 
 class CommissionKey {
   static String id = "id";

@@ -23,6 +23,7 @@ dependencies:
   path_provider: ^2.1.5
   dotted_border: ^2.1.0
   custom_date_range_picker: ^1.1.0
+  logger:
 
   #Firebase
   firebase_core: ^3.8.1

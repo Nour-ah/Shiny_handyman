@@ -212,8 +212,8 @@ Future<UserData> loginUser(Map request) async {
         await buildHttpResponse('login',
             request: request, method: HttpMethodType.POST))));
 
-    if (res.data != null) {
-      return res.data!;
+    if (res.userData != null) {
+      return res.userData!;
     } else {
       throw errorSomethingWentWrong;
     }

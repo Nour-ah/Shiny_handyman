@@ -1,18 +1,28 @@
 import 'package:handyman_provider_flutter/models/user_data.dart';
 
 class LoginResponse {
-  UserData? data;
+  UserData? userData;
+  bool? isUserExist;
+  String? apiToken;
+  String? message;
 
-  LoginResponse({this.data});
+  LoginResponse({this.userData, this.isUserExist, this.apiToken, this.message});
 
-  LoginResponse.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new UserData.fromJson(json['data']) : null;
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    return LoginResponse(
+      userData: json['data']['user'] != null
+          ? UserData.fromJson(json['data']['user'])
+          : null,
+      apiToken: json['data']['api_token'],
+      isUserExist: json['data'] != null ? true : false,
+      message: json['message'],
+    );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
+    if (this.userData != null) {
+      data['data']['user'] = this.userData!.toJson();
     }
     return data;
   }

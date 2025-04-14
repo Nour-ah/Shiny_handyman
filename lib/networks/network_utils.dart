@@ -8,6 +8,7 @@ import 'package:handyman_provider_flutter/utils/configs.dart';
 import 'package:handyman_provider_flutter/utils/constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:logger/logger.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../utils/model_keys.dart';
@@ -52,7 +53,7 @@ Future<Response> buildHttpResponse(
 
   try {
     if (method == HttpMethodType.POST) {
-      // log('Request: ${jsonEncode(request)}');
+      log('Request: ${jsonEncode(request)}');
       response =
           await http.post(url, body: jsonEncode(request), headers: headers);
     } else if (method == HttpMethodType.DELETE) {

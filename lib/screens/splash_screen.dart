@@ -1,3 +1,4 @@
+// screens/splash_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:handyman_provider_flutter/auth/sign_in_screen.dart';
@@ -39,7 +40,6 @@ class SplashScreenState extends State<SplashScreen> {
     // Sync new configurations when app is open
     await setValue(LAST_APP_CONFIGURATION_SYNCED_TIME, 0);
 
-    
     ///Set app configurations
     await getAppConfigurations().then((value) {}).catchError((e) async {
       if (!await isNetworkAvailable()) {
@@ -68,11 +68,11 @@ class SplashScreenState extends State<SplashScreen> {
         MaintenanceModeScreen()
             .launch(context, pageRouteAnimation: PageRouteAnimation.Fade);
       } else {
-      // Check if the user is unauthorized and logged in, then clear preferences and cached data.
-      // This condition occurs when the user is marked as inactive from the admin panel,
-      if (!appConfigurationStore.isUserAuthorized && appStore.isLoggedIn) {
-        await clearPreferences();
-      }
+        // Check if the user is unauthorized and logged in, then clear preferences and cached data.
+        // This condition occurs when the user is marked as inactive from the admin panel,
+        if (!appConfigurationStore.isUserAuthorized && appStore.isLoggedIn) {
+          await clearPreferences();
+        }
         if (!appStore.isLoggedIn) {
           SignInScreen().launch(context,
               isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
@@ -95,7 +95,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   updateProfilePhoto() async {
-     getUserDetail(appStore.userId).then((value) async {
+    getUserDetail(appStore.userId).then((value) async {
       await appStore.setUserProfile(value.data!.profileImage.validate());
     });
   }
@@ -128,12 +128,12 @@ class SplashScreenState extends State<SplashScreen> {
             children: [
               Image.asset(appLogo, height: 120, width: 120),
               32.height,
-              Text(APP_NAME,
-                  style: boldTextStyle(
-                      size: 26,
-                      color: appStore.isDarkMode ? Colors.white : Colors.black),
-                  textAlign: TextAlign.center),
-              16.height,
+              // Text(APP_NAME,
+              //     style: boldTextStyle(
+              //         size: 26,
+              //         color: appStore.isDarkMode ? Colors.white : Colors.black),
+              //     textAlign: TextAlign.center),
+              // 16.height,
               if (appNotSynced)
                 Observer(
                   builder: (_) => appStore.isLoading

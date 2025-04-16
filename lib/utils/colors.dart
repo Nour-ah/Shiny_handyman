@@ -1,3 +1,4 @@
+// utils/colors.dart
 import 'package:flutter/material.dart';
 
 const ryColor = Color(0xfff1f1f6);
@@ -19,12 +20,10 @@ const primaryColorWithOpacity = Color(0xFFBCBCC7);
 const ratingBarColor = Color(0xfff5c609);
 
 //Status Color
-const
-
-pending = Color(0xFFEA2F2F);
+const pending = Color(0xFFEA2F2F);
 const accept = Color(0xFF00968A);
 const on_going = Color(0xFFFD6922);
-const in_progress = Color(0xFFB953C0);
+const in_progress = Color(0xFF0079C5);
 const hold = Color(0xFFFFBD49);
 const cancelled = Color(0xffFF0303);
 const rejected = Color(0xFF8D0E06);

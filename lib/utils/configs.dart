@@ -1,10 +1,11 @@
+// utils/configs.dart
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
-const APP_NAME = 'Provider';
+const APP_NAME = 'Shiny Handyman';
 const DEFAULT_LANGUAGE = 'en';
 
-const primaryColor = Color(0xFF5F60B9);
+const primaryColor = Color(0xFF0079C5);
 
 const DOMAIN_URL = "https://shiny.olearns.com";
 

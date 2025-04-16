@@ -1,3 +1,4 @@
+// utils/common.dart
 import 'dart:convert';
 import 'dart:io';
 
@@ -40,18 +41,22 @@ void defaultSettings() {
   textBoldSizeGlobal = 14;
   textPrimarySizeGlobal = 14;
   textSecondarySizeGlobal = 12;
-  defaultToastBackgroundColor = appStore.isDarkMode ? Colors.white : Colors.black;
+  defaultToastBackgroundColor =
+      appStore.isDarkMode ? Colors.white : Colors.black;
   defaultToastTextColor = appStore.isDarkMode ? Colors.black : Colors.white;
 }
 //endregion
 
-ThemeMode get appThemeMode => appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light;
+ThemeMode get appThemeMode =>
+    appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light;
 
-Future<bool> get isIqonicProduct async => await getPackageName() == APP_PACKAGE_NAME;
+Future<bool> get isIqonicProduct async =>
+    await getPackageName() == APP_PACKAGE_NAME;
 
 bool get isRTL => RTL_LANGUAGES.contains(appStore.selectedLanguageCode);
 
-bool isCommissionTypePercent(String? type) => type.validate() == COMMISSION_TYPE_PERCENT;
+bool isCommissionTypePercent(String? type) =>
+    type.validate() == COMMISSION_TYPE_PERCENT;
 
 bool get isUserTypeHandyman => appStore.userType == USER_TYPE_HANDYMAN;
 
@@ -62,12 +67,18 @@ Future<void> setSaveSubscription({
   required ProviderSubscriptionModel subscription,
 }) async {
   await appStore.setPlanTitle(subscription.title ?? getStringAsync(PLAN_TITLE));
-  await appStore.setIdentifier(subscription.identifier ?? getStringAsync(PLAN_IDENTIFIER));
-  await appStore.setPlanEndDate(subscription.endAt ?? getStringAsync(PLAN_END_DATE));
+  await appStore.setIdentifier(
+      subscription.identifier ?? getStringAsync(PLAN_IDENTIFIER));
+  await appStore
+      .setPlanEndDate(subscription.endAt ?? getStringAsync(PLAN_END_DATE));
   await appStore.setPlanSubscribeStatus(isSubscribe.validate() == 1);
   if (appConfigurationStore.isInAppPurchaseEnable) {
-    await appStore.setProviderCurrentSubscriptionPlan(subscription ?? ProviderSubscriptionModel.fromJson(jsonDecode(getStringAsync(ACTIVE_IN_APP_PURCHASE_IDENTIFIER))));
-    await appStore.setActiveRevenueCatIdentifier(subscription.activePlanRevenueCatIdentifier ?? getStringAsync(ACTIVE_IN_APP_PURCHASE_IDENTIFIER));
+    await appStore.setProviderCurrentSubscriptionPlan(subscription ??
+        ProviderSubscriptionModel.fromJson(
+            jsonDecode(getStringAsync(ACTIVE_IN_APP_PURCHASE_IDENTIFIER))));
+    await appStore.setActiveRevenueCatIdentifier(
+        subscription.activePlanRevenueCatIdentifier ??
+            getStringAsync(ACTIVE_IN_APP_PURCHASE_IDENTIFIER));
   }
 }
 
@@ -85,11 +96,21 @@ int getRemainingPlanDays() {
 
 List<LanguageDataModel> languageList() {
   return [
-    LanguageDataModel(id: 1, name: 'English', languageCode: 'en', fullLanguageCode: 'en-US', flag: 'assets/flag/ic_us.png'),
-    LanguageDataModel(id: 2, name: 'Hindi', languageCode: 'hi', fullLanguageCode: 'hi-IN', flag: 'assets/flag/ic_india.png'),
-    LanguageDataModel(id: 3, name: 'Arabic', languageCode: 'ar', fullLanguageCode: 'ar-AR', flag: 'assets/flag/ic_ar.png'),
-    LanguageDataModel(id: 4, name: 'French', languageCode: 'fr', fullLanguageCode: 'fr-FR', flag: 'assets/flag/ic_fr.png'),
-    LanguageDataModel(id: 5, name: 'German', languageCode: 'de', fullLanguageCode: 'de-DE', flag: 'assets/flag/ic_de.png'),
+    LanguageDataModel(
+        id: 1,
+        name: 'English',
+        languageCode: 'en',
+        fullLanguageCode: 'en-US',
+        flag: 'assets/flag/ic_us.png'),
+    // LanguageDataModel(id: 2, name: 'Hindi', languageCode: 'hi', fullLanguageCode: 'hi-IN', flag: 'assets/flag/ic_india.png'),
+    LanguageDataModel(
+        id: 3,
+        name: 'Arabic',
+        languageCode: 'ar',
+        fullLanguageCode: 'ar-AR',
+        flag: 'assets/flag/ic_ar.png'),
+    //LanguageDataModel(id: 4, name: 'French', languageCode: 'fr', fullLanguageCode: 'fr-FR', flag: 'assets/flag/ic_fr.png'),
+    // LanguageDataModel(id: 5, name: 'German', languageCode: 'de', fullLanguageCode: 'de-DE', flag: 'assets/flag/ic_de.png'),
   ];
 
   /*if (getStringAsync(SERVER_LANGUAGES).isNotEmpty) {
@@ -171,34 +192,57 @@ String parseHtmlString(String? htmlString) {
   return parse(parse(htmlString).body!.text).documentElement!.text;
 }
 
-String formatDate(String? dateTime, {String format = DATE_FORMAT_1, bool isFromMicrosecondsSinceEpoch = false, bool isLanguageNeeded = true, bool isTime = false, bool showDateWithTime = false}) {
-  final parsedDateTime = isFromMicrosecondsSinceEpoch ? DateTime.fromMicrosecondsSinceEpoch(dateTime.validate().toInt() * 1000) : DateTime.parse(dateTime.validate());
+String formatDate(String? dateTime,
+    {String format = DATE_FORMAT_1,
+    bool isFromMicrosecondsSinceEpoch = false,
+    bool isLanguageNeeded = true,
+    bool isTime = false,
+    bool showDateWithTime = false}) {
+  final parsedDateTime = isFromMicrosecondsSinceEpoch
+      ? DateTime.fromMicrosecondsSinceEpoch(dateTime.validate().toInt() * 1000)
+      : DateTime.parse(dateTime.validate());
   if (isTime) {
-    return DateFormat('${getStringAsync(TIME_FORMAT)}', isLanguageNeeded ? appStore.selectedLanguageCode : null).format(parsedDateTime);
+    return DateFormat('${getStringAsync(TIME_FORMAT)}',
+            isLanguageNeeded ? appStore.selectedLanguageCode : null)
+        .format(parsedDateTime);
   } else {
     if (getStringAsync(DATE_FORMAT).validate().contains('dS')) {
       int day = parsedDateTime.day;
-      if (DateFormat('${getStringAsync(DATE_FORMAT)}', isLanguageNeeded ? appStore.selectedLanguageCode : null).format(parsedDateTime).contains('$day')) {
+      if (DateFormat('${getStringAsync(DATE_FORMAT)}',
+              isLanguageNeeded ? appStore.selectedLanguageCode : null)
+          .format(parsedDateTime)
+          .contains('$day')) {
         return DateFormat(
-                '${getStringAsync(DATE_FORMAT).validate().replaceAll('S', '')}${showDateWithTime ? ' ${getStringAsync(TIME_FORMAT)}' : ''}', isLanguageNeeded ? appStore.selectedLanguageCode : null)
+                '${getStringAsync(DATE_FORMAT).validate().replaceAll('S', '')}${showDateWithTime ? ' ${getStringAsync(TIME_FORMAT)}' : ''}',
+                isLanguageNeeded ? appStore.selectedLanguageCode : null)
             .format(parsedDateTime)
             .replaceFirst('$day', '${addOrdinalSuffix(day)}');
       }
     }
-    return DateFormat('${getStringAsync(DATE_FORMAT).validate()}${showDateWithTime ? ' ${getStringAsync(TIME_FORMAT)}' : ''}', isLanguageNeeded ? appStore.selectedLanguageCode : null)
+    return DateFormat(
+            '${getStringAsync(DATE_FORMAT).validate()}${showDateWithTime ? ' ${getStringAsync(TIME_FORMAT)}' : ''}',
+            isLanguageNeeded ? appStore.selectedLanguageCode : null)
         .format(parsedDateTime);
   }
 }
 
-String getTime(String? time, {String format = DISPLAY_TIME_FORMAT, bool isFromMicrosecondsSinceEpoch = false, bool isLanguageNeeded = true}) {
-  final parsedTime = isFromMicrosecondsSinceEpoch ? DateTime.fromMicrosecondsSinceEpoch(time!.validate().toInt() * 1000) : DateTime.parse(time.validate());
-  return DateFormat(getStringAsync(TIME_FORMAT), isLanguageNeeded ? appStore.selectedLanguageCode : null).format(parsedTime);
+String getTime(String? time,
+    {String format = DISPLAY_TIME_FORMAT,
+    bool isFromMicrosecondsSinceEpoch = false,
+    bool isLanguageNeeded = true}) {
+  final parsedTime = isFromMicrosecondsSinceEpoch
+      ? DateTime.fromMicrosecondsSinceEpoch(time!.validate().toInt() * 1000)
+      : DateTime.parse(time.validate());
+  return DateFormat(getStringAsync(TIME_FORMAT),
+          isLanguageNeeded ? appStore.selectedLanguageCode : null)
+      .format(parsedTime);
 }
 
 String getSlotWithDate({required String date, required String slotTime}) {
   DateTime originalDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').parse(date);
   DateTime newTime = DateFormat('HH:mm:ss').parse(slotTime);
-  DateTime newDateTime = DateTime(originalDateTime.year, originalDateTime.month, originalDateTime.day, newTime.hour, newTime.minute, newTime.second);
+  DateTime newDateTime = DateTime(originalDateTime.year, originalDateTime.month,
+      originalDateTime.day, newTime.hour, newTime.minute, newTime.second);
   return DateFormat('yyyy-MM-dd HH:mm:ss').format(newDateTime);
 }
 
@@ -279,7 +323,8 @@ String getDisplayTimeFormat(String phpFormat) {
   }
 }
 
-Future<void> commonLaunchUrl(String url, {LaunchMode launchMode = LaunchMode.inAppWebView}) async {
+Future<void> commonLaunchUrl(String url,
+    {LaunchMode launchMode = LaunchMode.inAppWebView}) async {
   await launchUrl(Uri.parse(url), mode: launchMode).catchError((e) {
     toast('Invalid URL: $url');
     throw e;
@@ -295,21 +340,25 @@ void viewFiles(String url) {
 void launchCall(String? url) {
   if (url.validate().isNotEmpty) {
     if (isIOS)
-      commonLaunchUrl('tel://' + url!, launchMode: LaunchMode.externalApplication);
+      commonLaunchUrl('tel://' + url!,
+          launchMode: LaunchMode.externalApplication);
     else
-      commonLaunchUrl('tel:' + url!, launchMode: LaunchMode.externalApplication);
+      commonLaunchUrl('tel:' + url!,
+          launchMode: LaunchMode.externalApplication);
   }
 }
 
 void launchMail(String? url) {
   if (url.validate().isNotEmpty) {
-    commonLaunchUrl('mailto:' + url!, launchMode: LaunchMode.externalApplication);
+    commonLaunchUrl('mailto:' + url!,
+        launchMode: LaunchMode.externalApplication);
   }
 }
 
 void launchMap(String? url) {
   if (url.validate().isNotEmpty) {
-    commonLaunchUrl(GOOGLE_MAP_PREFIX + Uri.encodeFull((url!)), launchMode: LaunchMode.externalApplication);
+    commonLaunchUrl(GOOGLE_MAP_PREFIX + Uri.encodeFull((url!)),
+        launchMode: LaunchMode.externalApplication);
   }
 }
 
@@ -319,14 +368,16 @@ void launchUrlCustomTab(String? url) {
       Uri.parse(url!),
       customTabsOptions: custom_tabs.CustomTabsOptions(
         showTitle: true,
-        colorSchemes: custom_tabs.CustomTabsColorSchemes.defaults(toolbarColor: primaryColor),
+        colorSchemes: custom_tabs.CustomTabsColorSchemes.defaults(
+            toolbarColor: primaryColor),
       ),
       safariVCOptions: custom_tabs.SafariViewControllerOptions(
         preferredBarTintColor: primaryColor,
         preferredControlTintColor: Colors.white,
         barCollapsingEnabled: true,
         entersReaderIfAvailable: true,
-        dismissButtonStyle: custom_tabs.SafariViewControllerDismissButtonStyle.close,
+        dismissButtonStyle:
+            custom_tabs.SafariViewControllerDismissButtonStyle.close,
       ),
     );
   }
@@ -343,9 +394,12 @@ String calculateTimer(int secTime) {
 
   //seconds = secTime - (hour * 3600) - (minute * 60);
 
-  String hourLeft = hour.toString().length < 2 ? "0" + hour.toString() : hour.toString();
+  String hourLeft =
+      hour.toString().length < 2 ? "0" + hour.toString() : hour.toString();
 
-  String minuteLeft = minute.toString().length < 2 ? "0" + minute.toString() : minute.toString();
+  String minuteLeft = minute.toString().length < 2
+      ? "0" + minute.toString()
+      : minute.toString();
 
   String minutes = minuteLeft == '00' ? '01' : minuteLeft;
 
@@ -354,7 +408,13 @@ String calculateTimer(int secTime) {
   return result;
 }
 
-Widget subSubscriptionPlanWidget({Color? planBgColor, String? planTitle, String? planSubtitle, String? planButtonTxt, Function? onTap, Color? btnColor}) {
+Widget subSubscriptionPlanWidget(
+    {Color? planBgColor,
+    String? planTitle,
+    String? planSubtitle,
+    String? planButtonTxt,
+    Function? onTap,
+    Color? btnColor}) {
   return Container(
     color: planBgColor,
     padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -372,7 +432,8 @@ Widget subSubscriptionPlanWidget({Color? planBgColor, String? planTitle, String?
         ).flexible(),
         8.width,
         AppButton(
-          child: Text(planButtonTxt.validate(), style: boldTextStyle(color: white)),
+          child: Text(planButtonTxt.validate(),
+              style: boldTextStyle(color: white)),
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           color: btnColor,
           elevation: 0,
@@ -414,8 +475,10 @@ String getPaymentStatusText(String? status, String? method) {
     return languages.advancePaid;
   } else if (status == PENDING && method == PAYMENT_METHOD_COD) {
     return languages.pendingApproval;
-  } else if (status == 'pending_approval' && method.validate().toLowerCase() == PAYMENT_METHOD_COD) {
-    return languages.pendingApproval; //TODO: check this condition status not coming from backend
+  } else if (status == 'pending_approval' &&
+      method.validate().toLowerCase() == PAYMENT_METHOD_COD) {
+    return languages
+        .pendingApproval; //TODO: check this condition status not coming from backend
   } else if (status == PENDING) {
     return languages.pending;
   } else if (status == SERVICE_PAYMENT_STATUS_ADVANCE_REFUND) {
@@ -468,11 +531,20 @@ Color getRatingBarColor(int rating, {bool showRedForZeroRating = false}) {
 }
 
 String formatBookingDate(String? dateTime,
-    {String format = DATE_FORMAT_1, bool isFromMicrosecondsSinceEpoch = false, bool isLanguageNeeded = true, bool isTime = false, bool showDateWithTime = false}) {
+    {String format = DATE_FORMAT_1,
+    bool isFromMicrosecondsSinceEpoch = false,
+    bool isLanguageNeeded = true,
+    bool isTime = false,
+    bool showDateWithTime = false}) {
   if (isFromMicrosecondsSinceEpoch) {
-    return DateFormat(format, isLanguageNeeded ? appStore.selectedLanguageCode : null).format(DateTime.fromMicrosecondsSinceEpoch(dateTime.validate().toInt() * 1000));
+    return DateFormat(
+            format, isLanguageNeeded ? appStore.selectedLanguageCode : null)
+        .format(DateTime.fromMicrosecondsSinceEpoch(
+            dateTime.validate().toInt() * 1000));
   } else {
-    return DateFormat(format, isLanguageNeeded ? appStore.selectedLanguageCode : null).format(DateTime.parse(dateTime.validate()));
+    return DateFormat(
+            format, isLanguageNeeded ? appStore.selectedLanguageCode : null)
+        .format(DateTime.parse(dateTime.validate()));
   }
 }
 
@@ -484,18 +556,22 @@ void ifNotTester(BuildContext context, VoidCallback callback) {
   }
 }
 
-void forceUpdate(BuildContext context, {required int currentAppVersionCode}) async {
+void forceUpdate(BuildContext context,
+    {required int currentAppVersionCode}) async {
   showInDialog(
     context,
     contentPadding: EdgeInsets.zero,
-    barrierDismissible: currentAppVersionCode >= getIntAsync(PROVIDER_APP_MINIMUM_VERSION).toInt(),
+    barrierDismissible: currentAppVersionCode >=
+        getIntAsync(PROVIDER_APP_MINIMUM_VERSION).toInt(),
     builder: (_) {
       return PopScope(
         canPop: false,
         onPopInvoked: (bool) {
           //
         },
-        child: NewUpdateDialog(canClose: currentAppVersionCode >= getIntAsync(PROVIDER_APP_MINIMUM_VERSION).toInt()),
+        child: NewUpdateDialog(
+            canClose: currentAppVersionCode >=
+                getIntAsync(PROVIDER_APP_MINIMUM_VERSION).toInt()),
       );
     },
   );
@@ -504,8 +580,11 @@ void forceUpdate(BuildContext context, {required int currentAppVersionCode}) asy
 Future<void> showForceUpdateDialog(BuildContext context) async {
   if (getBoolAsync(UPDATE_NOTIFY, defaultValue: true)) {
     getPackageInfo().then((value) {
-      if ((isAndroid || isIOS) && getIntAsync(PROVIDER_APP_LATEST_VERSION).toInt() > value.versionCode.validate().toInt()) {
-        forceUpdate(context, currentAppVersionCode: value.versionCode.validate().toInt());
+      if ((isAndroid || isIOS) &&
+          getIntAsync(PROVIDER_APP_LATEST_VERSION).toInt() >
+              value.versionCode.validate().toInt()) {
+        forceUpdate(context,
+            currentAppVersionCode: value.versionCode.validate().toInt());
       }
     });
   }
@@ -514,7 +593,9 @@ Future<void> showForceUpdateDialog(BuildContext context) async {
 Widget mobileNumberInfoWidget(BuildContext context) {
   return RichTextWidget(
     list: [
-      TextSpan(text: '${languages.lblAddYourCountryCode}', style: secondaryTextStyle()),
+      TextSpan(
+          text: '${languages.lblAddYourCountryCode}',
+          style: secondaryTextStyle()),
       TextSpan(text: ' "91-", "236-" ', style: boldTextStyle(size: 12)),
       TextSpan(
         text: ' (${languages.lblHelp})',
@@ -534,7 +615,8 @@ Future<List<File>> getMultipleImageSource({bool isCamera = true}) async {
 }
 
 Future<File> getCameraImage({bool isCamera = true}) async {
-  final pickedImage = await ImagePicker().pickImage(source: isCamera ? ImageSource.camera : ImageSource.gallery);
+  final pickedImage = await ImagePicker()
+      .pickImage(source: isCamera ? ImageSource.camera : ImageSource.gallery);
   return File(pickedImage!.path);
 }
 
@@ -566,7 +648,9 @@ String convertToHourMinute(String timeStr) {
     result += '${hours}${languages.lblHr}';
   }
   if (minutes > 0) {
-    result = (result.validate().isNotEmpty) ? '$result $minutes ${languages.min}' : '$minutes ${languages.min}';
+    result = (result.validate().isNotEmpty)
+        ? '$result $minutes ${languages.min}'
+        : '$minutes ${languages.min}';
   }
   return result;
 }
@@ -654,7 +738,8 @@ class OptionListWidget extends StatelessWidget {
               ),
             ),
             8.width,
-            Text("|", style: secondaryTextStyle()).visible(optionList.length != index + 1),
+            Text("|", style: secondaryTextStyle())
+                .visible(optionList.length != index + 1),
             8.width,
           ],
         ),
@@ -674,7 +759,9 @@ void share({required String url, required BuildContext context}) {
   if (Platform.isIOS) {
     try {
       final box = context.findRenderObject() as RenderBox?;
-      Share.share(url, subject: "", sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+      Share.share(url,
+          subject: "",
+          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     } catch (e) {
       log('Failed to share: $e');
     }
@@ -755,10 +842,13 @@ class MultiLanguageWidget extends StatelessWidget {
   }
 }
 
-SystemUiOverlayStyle defaultSystemUiOverlayStyle(BuildContext context, {Color? color, Brightness? statusBarIconBrightness}) {
+SystemUiOverlayStyle defaultSystemUiOverlayStyle(BuildContext context,
+    {Color? color, Brightness? statusBarIconBrightness}) {
   return SystemUiOverlayStyle(
     statusBarColor: color ?? context.scaffoldBackgroundColor,
-    statusBarIconBrightness: statusBarIconBrightness ?? (appStore.isDarkMode ? Brightness.light : Brightness.dark),
-    statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark,
+    statusBarIconBrightness: statusBarIconBrightness ??
+        (appStore.isDarkMode ? Brightness.light : Brightness.dark),
+    statusBarBrightness:
+        appStore.isDarkMode ? Brightness.light : Brightness.dark,
   );
 }

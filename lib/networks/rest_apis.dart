@@ -206,14 +206,14 @@ Future changeLanguage(Map request) async {
           request: request, method: HttpMethodType.POST))));
 }
 
-Future<UserData> loginUser(Map request) async {
+Future<LoginResponse> loginUser(Map request) async {
   try {
     LoginResponse res = LoginResponse.fromJson(await (handleResponse(
         await buildHttpResponse('login',
             request: request, method: HttpMethodType.POST))));
 
     if (res.userData != null) {
-      return res.userData!;
+      return res;
     } else {
       throw errorSomethingWentWrong;
     }

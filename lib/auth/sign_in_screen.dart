@@ -8,6 +8,7 @@ import 'package:handyman_provider_flutter/components/app_widgets.dart';
 import 'package:handyman_provider_flutter/components/selected_item_widget.dart';
 import 'package:handyman_provider_flutter/handyman/handyman_dashboard_screen.dart';
 import 'package:handyman_provider_flutter/main.dart';
+import 'package:handyman_provider_flutter/models/login_response.dart';
 import 'package:handyman_provider_flutter/models/user_data.dart';
 import 'package:handyman_provider_flutter/provider/provider_dashboard_screen.dart';
 import 'package:handyman_provider_flutter/utils/common.dart';
@@ -305,39 +306,40 @@ class _SignInScreenState extends State<SignInScreen> {
 
     appStore.setLoading(true);
     try {
-      UserData user = await loginUser(request);
+      LoginResponse res = await loginUser(request);
 
-      if (user.status != 1) {
+      if (res.userData!.status != 1) {
         appStore.setLoading(false);
         return toast(languages.pleaseContactYourAdmin);
       }
 
       await setValue(USER_PASSWORD, passwordCont.text);
       await setValue(IS_REMEMBERED, isRemember);
-      await saveUserData(user);
+      await saveUserData(res.userData!);
 
       authService.verifyFirebaseUser();
 
-      redirectWidget(res: user);
+      redirectWidget(res: res);
     } catch (e) {
       appStore.setLoading(false);
       toast(e.toString());
     }
   }
 
-  void redirectWidget({required UserData res}) async {
+  void redirectWidget({required LoginResponse res}) async {
     appStore.setLoading(false);
     TextInput.finishAutofillContext();
 
-    if (res.status.validate() == 1) {
+    if (res.userData!.status.validate() == 1) {
       await appStore.setToken(res.apiToken.validate());
-      appStore.setTester(res.email == DEFAULT_PROVIDER_EMAIL ||
-          res.email == DEFAULT_HANDYMAN_EMAIL);
+      appStore.setTester(res.userData!.email == DEFAULT_PROVIDER_EMAIL ||
+          res.userData!.email == DEFAULT_HANDYMAN_EMAIL);
 
-      if (res.userType.validate().trim() == USER_TYPE_PROVIDER) {
+      if (res.userData!.userType.validate().trim() == USER_TYPE_PROVIDER) {
         ProviderDashboardScreen(index: 0).launch(context,
             isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
-      } else if (res.userType.validate().trim() == USER_TYPE_HANDYMAN) {
+      } else if (res.userData!.userType.validate().trim() ==
+          USER_TYPE_HANDYMAN) {
         HandymanDashboardScreen().launch(context,
             isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
       } else {

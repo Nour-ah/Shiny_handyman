@@ -7,9 +7,11 @@ import '../../../../components/cached_image_widget.dart';
 import 'upi_app_model.dart';
 
 class UpiPayScreen extends StatefulWidget {
-  final List<UpiResponse> installedUpiAppList;
+  // final List<UpiResponse> installedUpiAppList;
 
-  const UpiPayScreen(this.installedUpiAppList, {super.key});
+  const UpiPayScreen(
+      // this.installedUpiAppList,
+      {super.key});
 
   @override
   State<UpiPayScreen> createState() => _UpiPayScreenState();
@@ -20,16 +22,16 @@ class _UpiPayScreenState extends State<UpiPayScreen> {
 
   @override
   void initState() {
-    upiApps.addAll(
-      UpiApps()
-          .upiAppList
-          .where((p0) => widget.installedUpiAppList.any((installedList) =>
-              installedList.packageName == p0['packageName']))
-          .map((element) => UpiApps(
-              name: element['name'],
-              imagePath: element['image'],
-              packageName: element['packageName'])),
-    );
+    // upiApps.addAll(
+    //   UpiApps()
+    //       .upiAppList
+    //       .where((p0) => widget.installedUpiAppList.any((installedList) =>
+    //           installedList?.packageName == p0['packageName']))
+    //       .map((element) => UpiApps(
+    //           name: element['name'],
+    //           imagePath: element['image'],
+    //           packageName: element['packageName'])),
+    // );
     super.initState();
   }
 

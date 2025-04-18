@@ -12,15 +12,20 @@ class AuthService {
     UserCredential? userCredential;
     try {
       /// login with Firebase
-      userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: appStore.userEmail, password: DEFAULT_PASSWORD_FOR_FIREBASE);
+      userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: appStore.userEmail, password: DEFAULT_PASSWORD_FOR_FIREBASE);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         /// register user in Firebase
-        userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: appStore.userEmail, password: DEFAULT_PASSWORD_FOR_FIREBASE);
+        userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: appStore.userEmail,
+                password: DEFAULT_PASSWORD_FOR_FIREBASE);
       }
     }
     if (userCredential != null && userCredential.user == null) {
-      userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: appStore.userEmail, password: DEFAULT_PASSWORD_FOR_FIREBASE);
+      userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: appStore.userEmail, password: DEFAULT_PASSWORD_FOR_FIREBASE);
     }
 
     if (userCredential != null) {
@@ -50,14 +55,17 @@ class AuthService {
       /// add user data in Firestore
       userData.uid = userCredential.user!.uid;
 
-      bool isUserExistWithUid = await userService.isUserExistWithUid(userCredential.user!.uid);
+      bool isUserExistWithUid =
+          await userService.isUserExistWithUid(userCredential.user!.uid);
 
       if (!isUserExistWithUid) {
         userData.createdAt = Timestamp.now().toDate().toString();
-        await userService.addDocumentWithCustomId(userCredential.user!.uid, userData.toFirebaseJson());
+        await userService.addDocumentWithCustomId(
+            userCredential.user!.uid, userData.toFirebaseJson());
       } else {
         /// Update user details in Firebase
-        await userService.updateDocument(userData.toFirebaseJson(), userCredential.user!.uid);
+        await userService.updateDocument(
+            userData.toFirebaseJson(), userCredential.user!.uid);
       }
 
       /// Update UID in Laravel DB

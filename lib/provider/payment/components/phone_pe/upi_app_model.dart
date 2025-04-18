@@ -6,6 +6,8 @@ class UpiApps {
 
   UpiApps({this.name, this.imagePath, this.packageName});
 
+  get upiAppList => null;
+
 //   List<Map<String, String>> upiAppList = [
 //     {"name": "PhonePe", "image": "assets/icons/upi_payment/phonepe-icon.webp", "packageName": "com.phonepe.app"},
 //     {"name": "Freecharge", "image": "assets/icons/upi_payment/freecharge.png", "packageName": "com.freecharge.android"},
@@ -19,6 +21,7 @@ class UpiApps {
 //     {"name": "Cred", "image": "assets/icons/upi_payment/cred.webp", "packageName": "com.dreamplug.androidapp"},
 //   ];
 // }
+}
 
 class UpiResponse {
   String? packageName;

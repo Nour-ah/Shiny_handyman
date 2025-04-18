@@ -317,8 +317,10 @@ class _SignInScreenState extends State<SignInScreen> {
       await setValue(IS_REMEMBERED, isRemember);
       await saveUserData(res.userData!);
 
-      authService.verifyFirebaseUser();
+      print('object1');
 
+      authService.verifyFirebaseUser();
+      print('object2');
       redirectWidget(res: res);
     } catch (e) {
       appStore.setLoading(false);

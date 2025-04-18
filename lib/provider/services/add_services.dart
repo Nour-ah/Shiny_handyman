@@ -74,7 +74,8 @@ class _AddServicesState extends State<AddServices> {
   bool isTimeSlotAvailable = false;
   bool isAdvancePayment = false;
   bool isDigitalService = false;
-  bool isAdvancePaymentAllowedBySystem = appConfigurationStore.isAdvancePaymentAllowed;
+  bool isAdvancePaymentAllowedBySystem =
+      appConfigurationStore.isAdvancePaymentAllowed;
   bool isOnSiteVisit = true;
   bool isOnlineOrRemoteService = false;
   List<File> imageFiles = [];
@@ -82,8 +83,15 @@ class _AddServicesState extends State<AddServices> {
 
   VisitTypeData? selectedVisitType;
   List<VisitTypeData> visitTypeData = [
-    VisitTypeData(isEnabled: false, title: languages.onSiteVisit, key: VISIT_OPTION_ON_SITE),
-    if (appConfigurationStore.digitalServiceStatus) VisitTypeData(isEnabled: false, title: languages.onlineRemoteService, key: VISIT_OPTION_ONLINE),
+    VisitTypeData(
+        isEnabled: false,
+        title: languages.onSiteVisit,
+        key: VISIT_OPTION_ON_SITE),
+    if (appConfigurationStore.digitalServiceStatus)
+      VisitTypeData(
+          isEnabled: false,
+          title: languages.onlineRemoteService,
+          key: VISIT_OPTION_ONLINE),
   ];
 
   List<StaticDataModel> typeStaticData = [
@@ -115,11 +123,18 @@ class _AddServicesState extends State<AddServices> {
     appStore.setSelectedLanguage(languageList().first);
     if (isUpdate) {
       tempAttachments = widget.data!.attchments.validate();
-      imageFiles = widget.data!.attchments.validate().map((e) => File(e.url.toString())).toList();
-      serviceNameCont.text = widget.data?.translations?[DEFAULT_LANGUAGE]?.name.validate() ?? "";
+      imageFiles = widget.data!.attchments
+          .validate()
+          .map((e) => File(e.url.toString()))
+          .toList();
+      serviceNameCont.text =
+          widget.data?.translations?[DEFAULT_LANGUAGE]?.name.validate() ?? "";
       priceCont.text = widget.data!.price.toString().validate();
       discountCont.text = widget.data!.discount.toString().validate();
-      descriptionCont.text = widget.data?.translations?[DEFAULT_LANGUAGE]?.description.validate() ?? "";
+      descriptionCont.text = widget
+              .data?.translations?[DEFAULT_LANGUAGE]?.description
+              .validate() ??
+          "";
       categoryId = widget.data!.categoryId.validate();
       subCategoryId = widget.data!.subCategoryId.validate();
       isFeature = widget.data!.isFeatured.validate() == 1 ? true : false;
@@ -130,14 +145,17 @@ class _AddServicesState extends State<AddServices> {
       } else {
         serviceStatusModel = statusListStaticData[1];
       }
-      currentTime = TimeOfDay(hour: widget.data!.duration.validate().splitBefore(':').toInt(), minute: widget.data!.duration.validate().splitAfter(':').toInt());
+      currentTime = TimeOfDay(
+          hour: widget.data!.duration.validate().splitBefore(':').toInt(),
+          minute: widget.data!.duration.validate().splitAfter(':').toInt());
       durationContHr.text = "${currentTime!.hour}";
       durationContMin.text = "${currentTime!.minute}";
       isTimeSlotAvailable = widget.data!.isSlot.validate() == 1 ? true : false;
       //isAdvancePaymentAllowedBySystem = widget.data!.isAdvancePaymentSetting;
       isAdvancePayment = widget.data!.isAdvancePayment;
       if (widget.data!.advancePaymentAmount != null) {
-        prePayAmountController.text = widget.data!.advancePaymentAmount.validate().toString();
+        prePayAmountController.text =
+            widget.data!.advancePaymentAmount.validate().toString();
       }
       if (widget.data?.translations?.isNotEmpty ?? false) {
         translations = await widget.data!.translations!;
@@ -147,7 +165,9 @@ class _AddServicesState extends State<AddServices> {
       timeSlotStore.initializeSlots(
           value: widget.data!.providerSlotData.validate());
 
-      selectedVisitType = visitTypeData.firstWhere((element) => element.key == widget.data!.visitType.validate(), orElse: () => visitTypeData.first);
+      selectedVisitType = visitTypeData.firstWhere(
+          (element) => element.key == widget.data!.visitType.validate(),
+          orElse: () => visitTypeData.first);
     }
 
     setState(() {});
@@ -155,13 +175,15 @@ class _AddServicesState extends State<AddServices> {
   }
 
 //region Add Service
-  Future<void> checkValidation({required bool isSave, LanguageDataModel? code}) async {
+  Future<void> checkValidation(
+      {required bool isSave, LanguageDataModel? code}) async {
     if ((!isUpdate && imageFiles.isEmpty) || (isUpdate && imageFiles.isEmpty)) {
       toast(languages.pleaseSelectImages);
       return;
     }
 
-    if ((!isUpdate && serviceAddressList.validate().isEmpty) || (isUpdate && serviceAddressList.validate().isEmpty)) {
+    if ((!isUpdate && serviceAddressList.validate().isEmpty) ||
+        (isUpdate && serviceAddressList.validate().isEmpty)) {
       toast(languages.pleaseSelectServiceAddresses);
       return;
     }
@@ -188,7 +210,7 @@ class _AddServicesState extends State<AddServices> {
 //endregion
 
 //region remove en translations
-   removeEnTranslations() {
+  removeEnTranslations() {
     if (translations.containsKey(DEFAULT_LANGUAGE)) {
       translations.remove(DEFAULT_LANGUAGE);
     }
@@ -218,14 +240,16 @@ class _AddServicesState extends State<AddServices> {
     }
 
     if (translations.isNotEmpty) {
-      req.putIfAbsent(AddServiceKey.translations, () => jsonEncode(translations));
+      req.putIfAbsent(
+          AddServiceKey.translations, () => jsonEncode(translations));
     }
 
     if (isUpdate) {
       req.putIfAbsent(AddServiceKey.id, () => widget.data!.id.validate());
     }
     if (isAdvancePaymentAllowedBySystem && isAdvancePayment) {
-      req.putIfAbsent(AdvancePaymentKey.advancePaymentAmount, () => prePayAmountController.text.validate().toDouble());
+      req.putIfAbsent(AdvancePaymentKey.advancePaymentAmount,
+          () => prePayAmountController.text.validate().toDouble());
     }
 
     return req;
@@ -239,7 +263,9 @@ class _AddServicesState extends State<AddServices> {
       await addServiceMultiPart(
         value: req,
         serviceAddressList: serviceAddressList,
-        imageFile: imageFiles.where((element) => !element.path.contains('http')).toList(),
+        imageFile: imageFiles
+            .where((element) => !element.path.contains('http'))
+            .toList(),
       );
     } catch (e) {
       toast(e.toString());
@@ -359,7 +385,9 @@ class _AddServicesState extends State<AddServices> {
               nextFocus: priceFocus,
               isValidationRequired: checkValidationLanguage(),
               errorThisFieldRequired: languages.hintRequired,
-              decoration: inputDecoration(context, hint: languages.hintServiceName, fillColor: context.scaffoldBackgroundColor),
+              decoration: inputDecoration(context,
+                  hint: languages.hintServiceName,
+                  fillColor: context.scaffoldBackgroundColor),
             ),
             16.height,
             CategorySubCatDropDown(
@@ -375,8 +403,19 @@ class _AddServicesState extends State<AddServices> {
                 setState(() {});
               },
             ),
+            InkWell(
+              onTap: (){
+                print(widget.data);
+              },
+              child: Text('data'),
+            ),
             ServiceAddressComponent(
-              selectedList: widget.data?.serviceAddressMapping.validate().map((e) => e.providerAddressMapping != null ? e.providerAddressMapping!.id.validate() : 0).toList(),
+              selectedList: widget.data?.serviceAddressMapping
+                  .validate()
+                  .map((e) => e.providerAddressMapping != null
+                  ? e.providerAddressMapping!.id.validate()
+                  : 0)
+                  .toList(),
               onSelectedList: (val) {
                 serviceAddressList = val;
               },
@@ -883,7 +922,9 @@ class _AddServicesState extends State<AddServices> {
                   margin: EdgeInsets.only(bottom: 12),
                   text: languages.btnSave,
                   height: 40,
-                  color: appStore.isLoading ? primaryColor.withValues(alpha:0.5) : primaryColor,
+                  color: appStore.isLoading
+                      ? primaryColor.withValues(alpha: 0.5)
+                      : primaryColor,
                   textStyle: boldTextStyle(color: white),
                   width: context.width() - context.navigationBarHeight,
                   onTap: appStore.isLoading

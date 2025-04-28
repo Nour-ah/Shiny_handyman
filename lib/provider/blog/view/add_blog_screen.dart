@@ -1,3 +1,4 @@
+// provider/blog/view/add_blog_screen.dart
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -33,9 +34,11 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
 
   TextEditingController titleCont = TextEditingController();
   TextEditingController descriptionCont = TextEditingController();
+  TextEditingController noteCont = TextEditingController();
 
   FocusNode titleFocus = FocusNode();
   FocusNode descriptionFocus = FocusNode();
+  FocusNode noteFocus = FocusNode();
 
   bool isUpdate = false;
   String blogStatus = '';
@@ -60,10 +63,14 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
     isUpdate = widget.data != null;
 
     if (isUpdate) {
-      imageFiles = widget.data!.attachment.validate().map((e) => File(e.url.toString())).toList();
+      imageFiles = widget.data!.attachment
+          .validate()
+          .map((e) => File(e.url.toString()))
+          .toList();
       tempAttachments = widget.data!.attachment.validate();
       titleCont.text = widget.data!.title.validate();
       descriptionCont.text = widget.data!.description.validate();
+      noteCont.text = widget.data!.description.validate();
       blogStatus = widget.data!.status.validate() == 1 ? ACTIVE : INACTIVE;
       if (blogStatus == ACTIVE) {
         blogStatusModel = statusListStaticData.first;
@@ -91,13 +98,19 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
         CommonKeys.id: widget.data != null ? widget.data!.id.validate() : '',
         AddBlogKey.title: titleCont.text.validate(),
         AddBlogKey.description: descriptionCont.text.validate(),
+        AddBlogKey.note: noteCont.text.validate(),
         AddBlogKey.isFeatured: '0',
         AddBlogKey.providerId: appStore.userId.validate(),
         AddBlogKey.authorId: appStore.userId.validate(),
         AddBlogKey.status: blogStatus.validate() == ACTIVE ? '1' : '0',
       };
 
-      addBlogMultiPart(value: req, imageFile: imageFiles.where((element) => !element.path.contains('http')).toList()).then((value) {
+      addBlogMultiPart(
+              value: req,
+              imageFile: imageFiles
+                  .where((element) => !element.path.contains('http'))
+                  .toList())
+          .then((value) {
         //
       }).catchError((e) {
         toast(e.toString());
@@ -151,7 +164,9 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
               nextFocus: descriptionFocus,
               isValidationRequired: true,
               errorThisFieldRequired: languages.hintRequired,
-              decoration: inputDecoration(context, hint: languages.enterBlogTitle, fillColor: context.scaffoldBackgroundColor),
+              decoration: inputDecoration(context,
+                  hint: languages.enterBlogTitle,
+                  fillColor: context.scaffoldBackgroundColor),
             ),
             16.height,
             AppTextField(
@@ -162,7 +177,8 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
               focus: descriptionFocus,
               isValidationRequired: true,
               enableChatGPT: appConfigurationStore.chatGPTStatus,
-              promptFieldInputDecorationChatGPT: inputDecoration(context).copyWith(
+              promptFieldInputDecorationChatGPT:
+                  inputDecoration(context).copyWith(
                 hintText: languages.writeHere,
                 fillColor: context.scaffoldBackgroundColor,
                 filled: true,
@@ -177,17 +193,44 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
               ),
             ),
             16.height,
+            AppTextField(
+              textFieldType: TextFieldType.NAME,
+              controller: noteCont, // استخدم متحكم خاص بالملاحظة
+              //nextFocus: compliantFocus,
+              focus: noteFocus,
+              minLines: 5,
+              maxLines: 8,
+              isValidationRequired: true,
+              enableChatGPT: appConfigurationStore.chatGPTStatus,
+              promptFieldInputDecorationChatGPT:
+                  inputDecoration(context).copyWith(
+                hintText: languages.hintnote,
+                fillColor: context.scaffoldBackgroundColor,
+                filled: true,
+              ),
+              decoration: inputDecoration(
+                context,
+                hint: languages.hintnote,
+                fillColor: context.scaffoldBackgroundColor,
+                // showLabel: false\
+              ),
+            ),
+            16.height,
             DropdownButtonFormField<StaticDataModel>(
               isExpanded: true,
               dropdownColor: context.cardColor,
-              value: blogStatusModel != null ? blogStatusModel : statusListStaticData.first,
+              value: blogStatusModel != null
+                  ? blogStatusModel
+                  : statusListStaticData.first,
               items: statusListStaticData.map((StaticDataModel data) {
                 return DropdownMenuItem<StaticDataModel>(
                   value: data,
                   child: Text(data.value.validate(), style: primaryTextStyle()),
                 );
               }).toList(),
-              decoration: inputDecoration(context, fillColor: context.scaffoldBackgroundColor, hint: languages.lblStatus),
+              decoration: inputDecoration(context,
+                  fillColor: context.scaffoldBackgroundColor,
+                  hint: languages.lblStatus),
               onChanged: (StaticDataModel? value) async {
                 blogStatus = value!.key.validate();
                 setState(() {});
@@ -217,21 +260,29 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.only(top: 16, left: 16.0, right: 16.0, bottom: 25.0),
+            padding:
+                EdgeInsets.only(top: 16, left: 16.0, right: 16.0, bottom: 25.0),
             child: Column(
               children: [
                 CustomImagePicker(
                   key: uniqueKey,
                   onRemoveClick: (value) {
-                    if (tempAttachments.validate().isNotEmpty && imageFiles.isNotEmpty) {
+                    if (tempAttachments.validate().isNotEmpty &&
+                        imageFiles.isNotEmpty) {
                       showConfirmDialogCustom(
                         context,
                         dialogType: DialogType.DELETE,
                         positiveText: languages.lblDelete,
                         negativeText: languages.lblCancel,
                         onAccept: (p0) {
-                          imageFiles.removeWhere((element) => element.path == value);
-                          removeAttachment(id: tempAttachments.validate().firstWhere((element) => element.url == value).id.validate());
+                          imageFiles
+                              .removeWhere((element) => element.path == value);
+                          removeAttachment(
+                              id: tempAttachments
+                                  .validate()
+                                  .firstWhere((element) => element.url == value)
+                                  .id
+                                  .validate());
                         },
                       );
                     } else {
@@ -241,7 +292,8 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
                         positiveText: languages.lblDelete,
                         negativeText: languages.lblCancel,
                         onAccept: (p0) {
-                          imageFiles.removeWhere((element) => element.path == value);
+                          imageFiles
+                              .removeWhere((element) => element.path == value);
                           if (isUpdate) {
                             uniqueKey = UniqueKey();
                           }
@@ -250,7 +302,12 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
                       );
                     }
                   },
-                  selectedImages: widget.data != null ? imageFiles.validate().map((e) => e.path.validate()).toList() : null,
+                  selectedImages: widget.data != null
+                      ? imageFiles
+                          .validate()
+                          .map((e) => e.path.validate())
+                          .toList()
+                      : null,
                   onFileSelected: (List<File> files) async {
                     imageFiles = files;
                     setState(() {});
@@ -272,7 +329,9 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
               ],
             ),
           ),
-          Observer(builder: (_) => LoaderWidget().center().visible(appStore.isLoading)),
+          Observer(
+              builder: (_) =>
+                  LoaderWidget().center().visible(appStore.isLoading)),
         ],
       ),
     );

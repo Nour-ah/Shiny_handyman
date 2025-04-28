@@ -1,3 +1,4 @@
+// handyman/service_proof_screen.dart
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -55,25 +56,35 @@ class ServiceProofScreenState extends State<ServiceProofScreen> {
   Future<void> submit() async {
     hideKeyboard(context);
 
-    MultipartRequest multiPartRequest = await getMultiPartRequest('save-service-proof');
-    multiPartRequest.fields[CommonKeys.serviceId] = widget.bookingDetail!.service!.id.toString().validate();
-    multiPartRequest.fields[CommonKeys.bookingId] = widget.bookingDetail!.bookingDetail!.id.toString().validate();
-    multiPartRequest.fields[CommonKeys.userId] = getIntAsync(USER_ID).toString();
-    multiPartRequest.fields[SaveBookingAttachment.title] = titleCont.text.validate();
-    multiPartRequest.fields[SaveBookingAttachment.description] = compliantCont.text.validate();
+    MultipartRequest multiPartRequest =
+        await getMultiPartRequest('save-service-proof');
+    multiPartRequest.fields[CommonKeys.serviceId] =
+        widget.bookingDetail!.service!.id.toString().validate();
+    multiPartRequest.fields[CommonKeys.bookingId] =
+        widget.bookingDetail!.bookingDetail!.id.toString().validate();
+    multiPartRequest.fields[CommonKeys.userId] =
+        getIntAsync(USER_ID).toString();
+    multiPartRequest.fields[SaveBookingAttachment.title] =
+        titleCont.text.validate();
+    multiPartRequest.fields[SaveBookingAttachment.description] =
+        compliantCont.text.validate();
 
     if (imageFiles.isNotEmpty) {
       await Future.forEach<XFile>(imageFiles, (element) async {
         int i = imageFiles.indexOf(element);
         log('${SaveBookingAttachment.bookingAttachment + i.toString()}');
-        multiPartRequest.files.add(await MultipartFile.fromPath('${SaveBookingAttachment.bookingAttachment + i.toString()}', element.path));
+        multiPartRequest.files.add(await MultipartFile.fromPath(
+            '${SaveBookingAttachment.bookingAttachment + i.toString()}',
+            element.path));
       });
     }
     if (imageFiles.isEmpty) {
       return toast(languages.lblChooseOneImage);
     }
 
-    if (imageFiles.isNotEmpty) multiPartRequest.fields[AddServiceKey.attachmentCount] = imageFiles.length.toString();
+    if (imageFiles.isNotEmpty)
+      multiPartRequest.fields[AddServiceKey.attachmentCount] =
+          imageFiles.length.toString();
 
     log('multiPartRequest.fields : ${multiPartRequest.fields}');
 
@@ -131,8 +142,10 @@ class ServiceProofScreenState extends State<ServiceProofScreen> {
     finish(context);
     GetMultipleImage(path: (xFiles) async {
       log('Path camera : ${xFiles.length.toString()}');
-      final existingNames = imageFiles.map((file) => file.name.trim().toLowerCase()).toSet();
-      imageFiles.addAll(xFiles.where((file) => !existingNames.contains(file.name.trim().toLowerCase())));
+      final existingNames =
+          imageFiles.map((file) => file.name.trim().toLowerCase()).toSet();
+      imageFiles.addAll(xFiles.where(
+          (file) => !existingNames.contains(file.name.trim().toLowerCase())));
       setState(() {});
     });
   }
@@ -197,7 +210,8 @@ class ServiceProofScreenState extends State<ServiceProofScreen> {
                     controller: titleCont,
                     nextFocus: compliantFocus,
                     isValidationRequired: true,
-                    decoration: inputDecoration(context, hint: languages.lblTitle, showLabel: false),
+                    decoration: inputDecoration(context,
+                        hint: languages.lblTitle, showLabel: false),
                   ),
                   16.height,
                   Row(
@@ -214,38 +228,63 @@ class ServiceProofScreenState extends State<ServiceProofScreen> {
                     minLines: 5,
                     isValidationRequired: true,
                     enableChatGPT: appConfigurationStore.chatGPTStatus,
-                    promptFieldInputDecorationChatGPT: inputDecoration(context).copyWith(
+                    promptFieldInputDecorationChatGPT:
+                        inputDecoration(context).copyWith(
                       hintText: languages.writeHere,
                       fillColor: context.scaffoldBackgroundColor,
                       filled: true,
                     ),
                     testWithoutKeyChatGPT: appConfigurationStore.testWithoutKey,
                     loaderWidgetForChatGPT: const ChatGPTLoadingWidget(),
-                    decoration: inputDecoration(context, hint: languages.hintDescription, showLabel: false),
+                    decoration: inputDecoration(context,
+                        hint: languages.hintDescription, showLabel: false),
                   ),
                   16.height,
+                  // AppTextField(
+                  //   textFieldType: TextFieldType.MULTILINE,
+                  //   // controller: compliantCont,
+                  //   minLines: 5,
+                  //   isValidationRequired: true,
+                  //   enableChatGPT: appConfigurationStore.chatGPTStatus,
+                  //   promptFieldInputDecorationChatGPT:
+                  //       inputDecoration(context).copyWith(
+                  //     hintText: languages.writeHere,
+                  //     fillColor: context.scaffoldBackgroundColor,
+                  //     filled: true,
+                  //   ),
+                  //   testWithoutKeyChatGPT: appConfigurationStore.testWithoutKey,
+                  //   loaderWidgetForChatGPT: const ChatGPTLoadingWidget(),
+                  //   decoration: inputDecoration(context,
+                  //       hint: languages.hintnote, showLabel: false),
+                  // ),
+                  // 16.height,
                   SizedBox(
                     width: context.width(),
                     child: Column(
                       children: [
                         DottedBorderWidget(
-                          color: primaryColor.withValues(alpha:0.6),
+                          color: primaryColor.withValues(alpha: 0.6),
                           strokeWidth: 1,
                           padding: EdgeInsets.all(16),
                           radius: defaultRadius,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.file_upload_outlined, size: 30, color: context.iconColor),
+                              Icon(Icons.file_upload_outlined,
+                                  size: 30, color: context.iconColor),
                               8.height,
-                              Text(languages.uploadMedia, style: boldTextStyle()),
+                              Text(languages.uploadMedia,
+                                  style: boldTextStyle()),
                             ],
                           ).center().onTap(() async {
                             _showImgPickBottomSheet(context);
-                          }, highlightColor: Colors.transparent, splashColor: Colors.transparent),
+                          },
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent),
                         ),
                         16.height,
-                        Text(languages.serviceProofMediaUploadNote, style: secondaryTextStyle()),
+                        Text(languages.serviceProofMediaUploadNote,
+                            style: secondaryTextStyle()),
                       ],
                     ),
                   ),
@@ -257,9 +296,13 @@ class ServiceProofScreenState extends State<ServiceProofScreen> {
                         return Stack(
                           alignment: Alignment.topRight,
                           children: [
-                            Image.file(File(imageFiles[i].path), width: 90, height: 90, fit: BoxFit.cover).cornerRadiusWithClipRRect(defaultRadius),
+                            Image.file(File(imageFiles[i].path),
+                                    width: 90, height: 90, fit: BoxFit.cover)
+                                .cornerRadiusWithClipRRect(defaultRadius),
                             Container(
-                              decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, backgroundColor: primaryColor),
+                              decoration: boxDecorationWithRoundedCorners(
+                                  boxShape: BoxShape.circle,
+                                  backgroundColor: primaryColor),
                               margin: EdgeInsets.only(right: 8, top: 8),
                               padding: EdgeInsets.all(4),
                               child: Icon(Icons.close, size: 16, color: white),

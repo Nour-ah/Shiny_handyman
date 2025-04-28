@@ -1,3 +1,4 @@
+// networks/firebase_services/auth_services.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handyman_provider_flutter/utils/constant.dart';
@@ -13,19 +14,18 @@ class AuthService {
     try {
       /// login with Firebase
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: appStore.userEmail, password: DEFAULT_PASSWORD_FOR_FIREBASE);
+          email: appStore.userEmail, password: appStore.userPassword);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         /// register user in Firebase
         userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-                email: appStore.userEmail,
-                password: DEFAULT_PASSWORD_FOR_FIREBASE);
+                email: appStore.userEmail, password: appStore.userPassword);
       }
     }
     if (userCredential != null && userCredential.user == null) {
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: appStore.userEmail, password: DEFAULT_PASSWORD_FOR_FIREBASE);
+          email: appStore.userEmail, password: appStore.userPassword);
     }
 
     if (userCredential != null) {
@@ -37,8 +37,11 @@ class AuthService {
 
   Future<void> verifyFirebaseUser() async {
     try {
+      print('🚀 [START] verifyFirebaseUser');
+      print('📧 Email: ${appStore.userEmail}');
+      print('🔐 Password: ${appStore.userPassword}');
       UserCredential userCredential = await getFirebaseUser();
-
+      print('✅ Firebase user retrieved: ${userCredential.user?.uid}');
       UserData userData = UserData();
       userData.id = appStore.userId;
       userData.email = appStore.userEmail;
@@ -54,7 +57,7 @@ class AuthService {
 
       /// add user data in Firestore
       userData.uid = userCredential.user!.uid;
-
+      print('📦 UserData ready: ${userData.toJson()}');
       bool isUserExistWithUid =
           await userService.isUserExistWithUid(userCredential.user!.uid);
 
@@ -62,10 +65,12 @@ class AuthService {
         userData.createdAt = Timestamp.now().toDate().toString();
         await userService.addDocumentWithCustomId(
             userCredential.user!.uid, userData.toFirebaseJson());
+        print('🆕 User added to Firestore with UID: ${userData.uid}');
       } else {
         /// Update user details in Firebase
         await userService.updateDocument(
             userData.toFirebaseJson(), userCredential.user!.uid);
+        print('♻️ User updated in Firestore with UID: ${userData.uid}');
       }
 
       /// Update UID in Laravel DB

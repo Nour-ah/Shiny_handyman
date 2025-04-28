@@ -1,3 +1,4 @@
+// auth/sign_in_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -151,25 +152,25 @@ class _SignInScreenState extends State<SignInScreen> {
                       _buildForgotRememberWidget(),
                       _buildButtonWidget(),
                       16.height,
-                      SnapHelperWidget<bool>(
-                        future: isIqonicProduct,
-                        onSuccess: (data) {
-                          if (data) {
-                            return UserDemoModeScreen(
-                              onChanged: (email, password) {
-                                if (email.isNotEmpty && password.isNotEmpty) {
-                                  emailCont.text = email;
-                                  passwordCont.text = password;
-                                } else {
-                                  emailCont.clear();
-                                  passwordCont.clear();
-                                }
-                              },
-                            );
-                          }
-                          return Offstage();
-                        },
-                      ),
+                      // SnapHelperWidget<bool>(
+                      //   future: isIqonicProduct,
+                      //   onSuccess: (data) {
+                      //     if (data) {
+                      //       return UserDemoModeScreen(
+                      //         onChanged: (email, password) {
+                      //           if (email.isNotEmpty && password.isNotEmpty) {
+                      //             emailCont.text = email;
+                      //             passwordCont.text = password;
+                      //           } else {
+                      //             emailCont.clear();
+                      //             passwordCont.clear();
+                      //           }
+                      //         },
+                      //       );
+                      //     }
+                      //     return Offstage();
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

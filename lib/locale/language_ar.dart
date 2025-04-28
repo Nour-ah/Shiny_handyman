@@ -265,6 +265,7 @@ class LanguageAr extends Languages {
   @override
   String get hintDescription => 'وصف';
 
+  String get hintnote => 'ملاحظه';
   @override
   String get hintSetAsFeature => 'تعيين كخدمة مميزة';
 

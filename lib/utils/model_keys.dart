@@ -1,3 +1,4 @@
+// utils/model_keys.dart
 import 'constant.dart';
 
 class CommonKeys {
@@ -101,6 +102,7 @@ class AddServiceKey {
   static String price = 'price';
   static String discountPrice = 'discount';
   static String description = 'description';
+  static String note = 'note_confirm';
   static String isFeatured = 'is_featured';
   static String isSlot = 'is_slot';
   static String status = 'status';
@@ -195,6 +197,7 @@ class AddBlogKey {
   static String id = 'id';
   static String title = 'title';
   static String description = 'description';
+  static String note = 'note_confirm';
   static String isFeatured = 'is_featured';
   static String status = 'status';
   static String providerId = 'provider_id';

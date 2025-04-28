@@ -1,3 +1,4 @@
+// models/service_model.dart
 import 'dart:convert';
 
 import 'package:handyman_provider_flutter/models/package_response.dart';
@@ -24,6 +25,7 @@ class ServiceData {
   String? duration;
   int? status;
   String? description;
+  String? note;
   int? isFeatured;
   String? providerName;
   String? providerImage;
@@ -75,54 +77,53 @@ class ServiceData {
   bool get isOnlineService => visitType == VISIT_OPTION_ONLINE;
 
   bool get isOnSiteService => visitType == VISIT_OPTION_ON_SITE;
-  
 
-  ServiceData({
-    this.id,
-    this.name,
-    this.imageAttachments,
-    this.providerSlotData,
-    this.categoryId,
-    this.providerId,
-    this.price,
-    this.priceFormat,
-    this.type,
-    this.discount,
-    this.duration,
-    this.status,
-    this.isSlot,
-    this.visitType,
-    this.description,
-    this.isFeatured,
-    this.providerName,
-    this.subCategoryId,
-    this.providerImage,
-    this.cityId,
-    this.categoryName,
-    this.attchments,
-    this.totalReview,
-    this.totalRating,
-    this.isFavourite,
-    this.serviceAddressMapping,
-    this.totalAmount,
-    this.discountPrice,
-    this.taxAmount,
-    this.couponDiscountAmount,
-    this.dateTimeVal,
-    this.couponId,
-    this.subCategoryName,
-    this.qty,
-    this.address,
-    this.bookingAddressId,
-    this.appliedCouponData,
-    this.isSelected,
-    this.servicePackage,
-    this.advancePaymentSetting,
-    this.isEnableAdvancePayment,
-    this.advancePaymentAmount,
-    this.advancePaymentPercentage,
-    this.translations
-  });
+  ServiceData(
+      {this.id,
+      this.name,
+      this.imageAttachments,
+      this.providerSlotData,
+      this.categoryId,
+      this.providerId,
+      this.price,
+      this.priceFormat,
+      this.type,
+      this.discount,
+      this.duration,
+      this.status,
+      this.isSlot,
+      this.visitType,
+      this.description,
+      this.note,
+      this.isFeatured,
+      this.providerName,
+      this.subCategoryId,
+      this.providerImage,
+      this.cityId,
+      this.categoryName,
+      this.attchments,
+      this.totalReview,
+      this.totalRating,
+      this.isFavourite,
+      this.serviceAddressMapping,
+      this.totalAmount,
+      this.discountPrice,
+      this.taxAmount,
+      this.couponDiscountAmount,
+      this.dateTimeVal,
+      this.couponId,
+      this.subCategoryName,
+      this.qty,
+      this.address,
+      this.bookingAddressId,
+      this.appliedCouponData,
+      this.isSelected,
+      this.servicePackage,
+      this.advancePaymentSetting,
+      this.isEnableAdvancePayment,
+      this.advancePaymentAmount,
+      this.advancePaymentPercentage,
+      this.translations});
 
   ServiceData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -140,27 +141,36 @@ class ServiceData {
     isSlot = json['is_slot'];
     visitType = json['visit_type'];
     description = json['description'];
+    note = json['note_confirm'];
     isFeatured = json['is_featured'];
     providerName = json['provider_name'];
     cityId = json['city_id'];
     categoryName = json['category_name'];
     //image_attchments = json['attchments'];
-    imageAttachments = json['attchments'] != null ? List<String>.from(json['attchments']) : null;
-    attchments = json['attchments_array'] != null ? (json['attchments_array'] as List).map((i) => Attachments.fromJson(i)).toList() : null;
-    providerSlotData = json['slots'] != null ? (json['slots'] as List).map((i) => SlotData.fromJson(i)).toList() : null;
+    imageAttachments = json['attchments'] != null
+        ? List<String>.from(json['attchments'])
+        : null;
+    attchments = json['attchments_array'] != null
+        ? (json['attchments_array'] as List)
+            .map((i) => Attachments.fromJson(i))
+            .toList()
+        : null;
+    providerSlotData = json['slots'] != null
+        ? (json['slots'] as List).map((i) => SlotData.fromJson(i)).toList()
+        : null;
     subCategoryName = json['subcategory_name'];
-    translations =  json['translations'] != null
-    ? (jsonDecode(json['translations']) as Map<String, dynamic>).map(
-        (key, value) {
-          if (value is Map<String, dynamic>) {
-            return MapEntry(key, MultiLanguageRequest.fromJson(value));
-          } else {
-            print('Unexpected translation value for key $key: $value');
-            return MapEntry(key, MultiLanguageRequest());
-          }
-        },
-      )
-    : null;
+    translations = json['translations'] != null
+        ? (jsonDecode(json['translations']) as Map<String, dynamic>).map(
+            (key, value) {
+              if (value is Map<String, dynamic>) {
+                return MapEntry(key, MultiLanguageRequest.fromJson(value));
+              } else {
+                print('Unexpected translation value for key $key: $value');
+                return MapEntry(key, MultiLanguageRequest());
+              }
+            },
+          )
+        : null;
     totalReview = json['total_review'];
     totalRating = json['total_rating'];
     isFavourite = json['is_favourite'];
@@ -171,7 +181,11 @@ class ServiceData {
         serviceAddressMapping!.add(new ServiceAddressMapping.fromJson(v));
       });
     }
-    servicePackage = json['servicePackage'] != null ? (json['servicePackage'] as List).map((i) => PackageData.fromJson(i)).toList() : null;
+    servicePackage = json['servicePackage'] != null
+        ? (json['servicePackage'] as List)
+            .map((i) => PackageData.fromJson(i))
+            .toList()
+        : null;
     advancePaymentSetting = json[AdvancePaymentKey.advancePaymentSetting];
     isEnableAdvancePayment = json[AdvancePaymentKey.isEnableAdvancePayment];
     advancePaymentAmount = json[AdvancePaymentKey.advancePaymentAmount];
@@ -194,6 +208,7 @@ class ServiceData {
     data['duration'] = this.duration;
     data['status'] = this.status;
     data['description'] = this.description;
+    data['note_confirm'] = this.note;
     data['is_featured'] = this.isFeatured;
     data['provider_name'] = this.providerName;
     data['city_id'] = this.cityId;
@@ -208,25 +223,31 @@ class ServiceData {
       data['slots'] = this.providerSlotData;
     }
     if (this.servicePackage != null) {
-      data['servicePackage'] = this.servicePackage!.map((v) => v.toJson()).toList();
+      data['servicePackage'] =
+          this.servicePackage!.map((v) => v.toJson()).toList();
     }
-     if (translations != null) {
-      data['translations'] = translations!.map((key, value) => MapEntry(key, value.toJson()));
+    if (translations != null) {
+      data['translations'] =
+          translations!.map((key, value) => MapEntry(key, value.toJson()));
     }
     data['total_review'] = this.totalReview;
     data['total_rating'] = this.totalRating;
     data['is_favourite'] = this.isFavourite;
     if (this.serviceAddressMapping != null) {
-      data['service_address_mapping'] = this.serviceAddressMapping!.map((v) => v.toJson()).toList();
+      data['service_address_mapping'] =
+          this.serviceAddressMapping!.map((v) => v.toJson()).toList();
     }
     if (this.attchments != null) {
-      data['attchments_array'] = this.attchments!.map((v) => v.toJson()).toList();
+      data['attchments_array'] =
+          this.attchments!.map((v) => v.toJson()).toList();
     }
-    
+
     data[AdvancePaymentKey.advancePaymentSetting] = this.advancePaymentSetting;
-    data[AdvancePaymentKey.isEnableAdvancePayment] = this.isEnableAdvancePayment;
+    data[AdvancePaymentKey.isEnableAdvancePayment] =
+        this.isEnableAdvancePayment;
     data[AdvancePaymentKey.advancePaymentAmount] = this.advancePaymentAmount;
-    data[AdvancePaymentKey.advancePaymentAmount] = this.advancePaymentPercentage;
+    data[AdvancePaymentKey.advancePaymentAmount] =
+        this.advancePaymentPercentage;
     return data;
   }
 }

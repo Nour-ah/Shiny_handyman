@@ -266,6 +266,7 @@ class LanguageEn extends Languages {
   @override
   String get hintDescription => 'Description';
 
+  String get hintnote => 'Note';
   @override
   String get hintSetAsFeature => 'Set as Feature';
 

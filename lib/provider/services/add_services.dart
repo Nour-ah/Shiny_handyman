@@ -1,3 +1,4 @@
+// provider/services/add_services.dart
 import 'dart:convert';
 import 'dart:io';
 
@@ -49,6 +50,7 @@ class _AddServicesState extends State<AddServices> {
   TextEditingController prePayAmountController = TextEditingController();
   TextEditingController hoursCont = TextEditingController();
   TextEditingController miutesCont = TextEditingController();
+  TextEditingController noteCont = TextEditingController();
 
   /// FocusNode
   FocusNode serviceNameFocus = FocusNode();
@@ -58,7 +60,7 @@ class _AddServicesState extends State<AddServices> {
   FocusNode durationHrFocus = FocusNode();
   FocusNode durationMinFocus = FocusNode();
   FocusNode prePayAmountFocus = FocusNode();
-
+  FocusNode noteFocus = FocusNode();
   FocusNode hoursFocus = FocusNode();
   FocusNode minutesFocus = FocusNode();
 
@@ -135,6 +137,8 @@ class _AddServicesState extends State<AddServices> {
               .data?.translations?[DEFAULT_LANGUAGE]?.description
               .validate() ??
           "";
+      noteCont.text =
+          widget.data?.translations?[DEFAULT_LANGUAGE]?.note.validate() ?? "";
       categoryId = widget.data!.categoryId.validate();
       subCategoryId = widget.data!.subCategoryId.validate();
       isFeature = widget.data!.isFeatured.validate() == 1 ? true : false;
@@ -227,6 +231,7 @@ class _AddServicesState extends State<AddServices> {
       AddServiceKey.price: priceCont.text,
       AddServiceKey.discountPrice: discountCont.text,
       AddServiceKey.description: enTranslations.description.validate(),
+      AddServiceKey.note: enTranslations.note.validate(),
       AddServiceKey.isFeatured: isFeature ? '1' : '0',
       AddServiceKey.isSlot: isTimeSlotAvailable ? '1' : '0',
       AddServiceKey.status: serviceStatus.validate() == ACTIVE ? '1' : '0',
@@ -289,11 +294,13 @@ class _AddServicesState extends State<AddServices> {
             MultiLanguageRequest(
               name: serviceNameCont.text.validate(),
               description: descriptionCont.text.validate(),
+              note: noteCont.text.validate(),
             );
       } else {
         enTranslations = enTranslations.copyWith(
           name: serviceNameCont.text.validate(),
           description: descriptionCont.text.validate(),
+          note: noteCont.text.validate(),
         );
       }
     }
@@ -308,6 +315,7 @@ class _AddServicesState extends State<AddServices> {
     if (languageCode == DEFAULT_LANGUAGE) {
       serviceNameCont.text = enTranslations.name.validate();
       descriptionCont.text = enTranslations.description.validate();
+      noteCont.text = enTranslations.note.validate();
     } else {
       final translation = translations[languageCode] ?? MultiLanguageRequest();
       serviceNameCont.text = translation.name.validate();
@@ -322,6 +330,8 @@ class _AddServicesState extends State<AddServices> {
   void disposeAllTextFieldsController() {
     serviceNameCont.clear();
     descriptionCont.clear();
+    noteCont.clear();
+
     setState(() {});
   }
 
@@ -404,7 +414,7 @@ class _AddServicesState extends State<AddServices> {
               },
             ),
             InkWell(
-              onTap: (){
+              onTap: () {
                 print(widget.data);
               },
               child: Text('data'),
@@ -413,8 +423,8 @@ class _AddServicesState extends State<AddServices> {
               selectedList: widget.data?.serviceAddressMapping
                   .validate()
                   .map((e) => e.providerAddressMapping != null
-                  ? e.providerAddressMapping!.id.validate()
-                  : 0)
+                      ? e.providerAddressMapping!.id.validate()
+                      : 0)
                   .toList(),
               onSelectedList: (val) {
                 serviceAddressList = val;
@@ -594,6 +604,7 @@ class _AddServicesState extends State<AddServices> {
                 ),
               ],
             ),
+
             AppTextField(
               textFieldType: TextFieldType.MULTILINE,
               minLines: 5,
@@ -616,6 +627,38 @@ class _AddServicesState extends State<AddServices> {
                 fillColor: context.scaffoldBackgroundColor,
               ),
             ),
+            // AppTextField(
+            //   textFieldType: TextFieldType.NAME,
+            //   controller: noteCont, // استخدم متحكم خاص بالملاحظة
+            //   //nextFocus: compliantFocus,
+            //   isValidationRequired: true,
+            //   decoration: inputDecoration(context,
+            //       hint: languages.hintnote, showLabel: false),
+            // ),
+
+            AppTextField(
+              textFieldType: TextFieldType.MULTILINE,
+              minLines: 2,
+              controller: noteCont,
+              focus: noteFocus,
+              enableChatGPT: appConfigurationStore.chatGPTStatus,
+              promptFieldInputDecorationChatGPT:
+                  inputDecoration(context).copyWith(
+                hintText: languages.writeHere,
+                fillColor: context.scaffoldBackgroundColor,
+                filled: true,
+              ),
+              testWithoutKeyChatGPT: appConfigurationStore.testWithoutKey,
+              //loaderWidgetForChatGPT: const ChatGPTLoadingWidget(),
+              errorThisFieldRequired: languages.hintRequired,
+              isValidationRequired: checkValidationLanguage(),
+              decoration: inputDecoration(
+                context,
+                hint: languages.hintnote,
+                fillColor: context.scaffoldBackgroundColor,
+              ),
+            ),
+            16.height,
             Container(
               decoration: boxDecorationDefault(
                   color: context.scaffoldBackgroundColor,
@@ -930,6 +973,8 @@ class _AddServicesState extends State<AddServices> {
                   onTap: appStore.isLoading
                       ? () {}
                       : () {
+                          print("قيمة الملاحظة: ${noteCont.text}");
+
                           checkValidation(isSave: true);
                         },
                 ),

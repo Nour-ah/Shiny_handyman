@@ -1,3 +1,4 @@
+// networks/rest_apis.dart
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -21,7 +22,6 @@ import 'package:handyman_provider_flutter/models/document_list_response.dart';
 import 'package:handyman_provider_flutter/models/handyman_dashboard_response.dart';
 import 'package:handyman_provider_flutter/models/login_response.dart';
 import 'package:handyman_provider_flutter/models/notification_list_response.dart';
-import 'package:handyman_provider_flutter/models/payment_list_reasponse.dart';
 import 'package:handyman_provider_flutter/models/plan_list_response.dart';
 import 'package:handyman_provider_flutter/models/plan_request_model.dart';
 import 'package:handyman_provider_flutter/models/profile_update_response.dart';
@@ -148,7 +148,6 @@ Future<void> clearPreferences() async {
   cachedProviderDashboardResponse = null;
   cachedHandymanDashboardResponse = null;
   cachedBookingList = null;
-  cachedPaymentList = null;
   cachedNotifications = null;
   cachedBookingStatusDropdown = null;
   cachedWalletList = null;
@@ -1196,55 +1195,6 @@ Future<List<PaymentSetting>> getPaymentGateways(
   } catch (e) {
     throw e;
   }
-}
-
-Future<PaymentListResponse> getPaymentList(int page,
-    {var perPage = PER_PAGE_ITEM}) async {
-  return PaymentListResponse.fromJson(await handleResponse(
-      await buildHttpResponse('payment-list?per_page=$perPage&page=$page',
-          method: HttpMethodType.GET)));
-}
-
-Future<List<PaymentData>> getPaymentAPI(
-    int page, List<PaymentData> list, Function(bool)? lastPageCallback,
-    {var perPage = PER_PAGE_ITEM}) async {
-  try {
-    var res = PaymentListResponse.fromJson(await handleResponse(
-        await buildHttpResponse('payment-list?per_page=$perPage&page=$page',
-            method: HttpMethodType.GET)));
-
-    if (page == 1) list.clear();
-    list.addAll(res.data.validate());
-
-    cachedPaymentList = list;
-
-    appStore.setLoading(false);
-
-    lastPageCallback?.call(res.data.validate().length != PER_PAGE_ITEM);
-
-    return list;
-  } catch (e) {
-    appStore.setLoading(false);
-
-    throw e;
-  }
-}
-
-Future<List<PaymentData>> getUserPaymentList(int page, int id,
-    List<PaymentData> list, Function(bool)? lastPageCallback) async {
-  appStore.setLoading(true);
-  var res = PaymentListResponse.fromJson(await handleResponse(
-      await buildHttpResponse('payment-list?booking_id=$id&page=$page',
-          method: HttpMethodType.GET)));
-
-  if (page == 1) list.clear();
-  list.addAll(res.data.validate());
-
-  appStore.setLoading(false);
-
-  lastPageCallback?.call(res.data.validate().length != PER_PAGE_ITEM);
-
-  return list;
 }
 
 Future<List<RequestListModel>> getRequestList(int page, int id,

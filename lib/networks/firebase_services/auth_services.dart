@@ -11,6 +11,9 @@ import '../../networks/rest_apis.dart';
 class AuthService {
   Future<UserCredential> getFirebaseUser() async {
     UserCredential? userCredential;
+    if (appStore.userEmail.isEmpty || appStore.userPassword.isEmpty) {
+      throw 'الإيميل أو كلمة المرور لا يمكن أن تكون فارغة';
+    }
     try {
       /// login with Firebase
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(

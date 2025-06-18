@@ -1,3 +1,4 @@
+// provider/subscription/subscription_history_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:handyman_provider_flutter/components/app_widgets.dart';
@@ -7,7 +8,6 @@ import 'package:handyman_provider_flutter/models/provider_subscription_model.dar
 import 'package:handyman_provider_flutter/networks/rest_apis.dart';
 import 'package:handyman_provider_flutter/provider/subscription/components/subscription_widget.dart';
 import 'package:handyman_provider_flutter/provider/subscription/shimmer/subscription_shimmer.dart';
-import 'package:handyman_provider_flutter/services/in_app_purchase.dart';
 import 'package:handyman_provider_flutter/utils/configs.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -15,7 +15,8 @@ import '../../components/empty_error_state_widget.dart';
 
 class SubscriptionHistoryScreen extends StatefulWidget {
   @override
-  _SubscriptionHistoryScreenState createState() => _SubscriptionHistoryScreenState();
+  _SubscriptionHistoryScreenState createState() =>
+      _SubscriptionHistoryScreenState();
 }
 
 class _SubscriptionHistoryScreenState extends State<SubscriptionHistoryScreen> {
@@ -54,7 +55,11 @@ class _SubscriptionHistoryScreenState extends State<SubscriptionHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(languages.lblSubscriptionHistory, backWidget: BackWidget(), elevation: 0, color: primaryColor, textColor: Colors.white),
+      appBar: appBarWidget(languages.lblSubscriptionHistory,
+          backWidget: BackWidget(),
+          elevation: 0,
+          color: primaryColor,
+          textColor: Colors.white),
       body: Stack(
         children: [
           SnapHelperWidget<List<ProviderSubscriptionModel>>(
@@ -116,7 +121,8 @@ class _SubscriptionHistoryScreenState extends State<SubscriptionHistoryScreen> {
               );
             },
           ),
-          Observer(builder: (context) => LoaderWidget().visible(appStore.isLoading)),
+          Observer(
+              builder: (context) => LoaderWidget().visible(appStore.isLoading)),
         ],
       ),
     );

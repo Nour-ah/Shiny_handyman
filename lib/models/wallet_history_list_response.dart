@@ -1,3 +1,4 @@
+// models/wallet_history_list_response.dart
 import 'dart:convert';
 
 import 'package:handyman_provider_flutter/models/pagination_model.dart';
@@ -7,13 +8,21 @@ class WalletHistoryListResponse {
   Pagination? pagination;
   num? availableBalance;
 
-  WalletHistoryListResponse({this.data, this.pagination, this.availableBalance});
+  WalletHistoryListResponse(
+      {this.data, this.pagination, this.availableBalance});
 
   factory WalletHistoryListResponse.fromJson(Map<String, dynamic> json) {
     return WalletHistoryListResponse(
-      data: json['data'] != null ? (json['data'] as List).map((i) => WalletHistory.fromJson(i)).toList() : null,
-      pagination: json['pagination'] != null ? Pagination.fromJson(json['pagination']) : null,
-      availableBalance: json['available_balance'] != null ? json['available_balance'] : 0,
+      data: json['data'] != null
+          ? (json['data'] as List)
+              .map((i) => WalletHistory.fromJson(i))
+              .toList()
+          : null,
+      pagination: json['pagination'] != null
+          ? Pagination.fromJson(json['pagination'])
+          : null,
+      availableBalance:
+          json['available_balance'] != null ? json['available_balance'] : 0,
     );
   }
 
@@ -48,7 +57,11 @@ class WalletHistory {
 
   factory WalletHistory.fromJson(Map<String, dynamic> json) {
     return WalletHistory(
-      activityData: json['activity_data'] != null ? ActivityData.fromJson(jsonDecode(json['activity_data'] as String)) : null,
+      // activityData: json['activity_data'] != null ? ActivityData.fromJson(jsonDecode(json['activity_data'] as String)) : null,
+      activityData: json['activity_data'] != null
+          ? ActivityData.fromJson(json['activity_data'])
+          : null,
+
       activityMessage: json['activity_message'],
       activityType: json['activity_type'],
       datetime: json['datetime'],

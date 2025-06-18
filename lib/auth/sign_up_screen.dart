@@ -1,3 +1,4 @@
+// auth/sign_up_screen.dart
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
 import 'package:country_picker/country_picker.dart';
@@ -19,9 +20,6 @@ import 'package:handyman_provider_flutter/utils/extensions/string_extension.dart
 import 'package:handyman_provider_flutter/utils/images.dart';
 import 'package:handyman_provider_flutter/utils/model_keys.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:url_launcher/url_launcher.dart' as launch;
-
-import '../app_theme.dart';
 import '../components/back_widget.dart';
 import '../components/cached_image_widget.dart';
 import '../models/user_data.dart';

@@ -1,3 +1,4 @@
+// main.dart
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -38,7 +39,6 @@ import 'models/booking_status_response.dart';
 import 'models/dashboard_response.dart';
 import 'models/extra_charges_model.dart';
 import 'models/handyman_dashboard_response.dart';
-import 'models/payment_list_reasponse.dart';
 import 'provider/timeSlots/timeSlotStore/time_slot_store.dart';
 import 'store/app_configuration_store.dart';
 import 'utils/firebase_messaging_utils.dart';
@@ -68,7 +68,7 @@ NotificationService notificationService = NotificationService();
 //endregion
 
 //region In App Purchase Service
-InAppPurchaseService inAppPurchaseService=InAppPurchaseService();
+InAppPurchaseService inAppPurchaseService = InAppPurchaseService();
 //region
 
 //region Global Variables
@@ -81,7 +81,6 @@ List<ExtraChargesModel> chargesList = [];
 DashboardResponse? cachedProviderDashboardResponse;
 HandymanDashBoardResponse? cachedHandymanDashboardResponse;
 List<BookingData>? cachedBookingList;
-List<PaymentData>? cachedPaymentList;
 List<NotificationData>? cachedNotifications;
 List<BookingStatusResponse>? cachedBookingStatusDropdown;
 List<(int serviceId, ServiceDetailResponse)?> listOfCachedData = [];
@@ -111,7 +110,7 @@ void main() async {
       log(e.toString());
     });
   }
- HttpOverrides.global = MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
 
   defaultSettings();
 
@@ -162,7 +161,6 @@ class _MyAppState extends State<MyApp> {
     return RestartAppWidget(
       child: Observer(
         builder: (_) => MaterialApp(
-         
           debugShowCheckedModeBanner: false,
           navigatorKey: navigatorKey,
           home: SplashScreen(),
@@ -177,11 +175,12 @@ class _MyAppState extends State<MyApp> {
             GlobalCupertinoLocalizations.delegate,
           ],
           builder: (context, child) {
-                  return MediaQuery(
-                    child: child!,
-                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
-                  );
-                },
+            return MediaQuery(
+              child: child!,
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(1.0)),
+            );
+          },
           localeResolutionCallback: (locale, supportedLocales) => locale,
           locale: Locale(appStore.selectedLanguageCode),
         ),
@@ -193,6 +192,8 @@ class _MyAppState extends State<MyApp> {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

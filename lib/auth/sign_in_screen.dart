@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:handyman_provider_flutter/auth/component/user_demo_mode_screen.dart';
 import 'package:handyman_provider_flutter/auth/forgot_password_dialog.dart';
 import 'package:handyman_provider_flutter/auth/sign_up_screen.dart';
 import 'package:handyman_provider_flutter/components/app_widgets.dart';
@@ -10,7 +9,6 @@ import 'package:handyman_provider_flutter/components/selected_item_widget.dart';
 import 'package:handyman_provider_flutter/handyman/handyman_dashboard_screen.dart';
 import 'package:handyman_provider_flutter/main.dart';
 import 'package:handyman_provider_flutter/models/login_response.dart';
-import 'package:handyman_provider_flutter/models/user_data.dart';
 import 'package:handyman_provider_flutter/provider/provider_dashboard_screen.dart';
 import 'package:handyman_provider_flutter/utils/common.dart';
 import 'package:handyman_provider_flutter/utils/configs.dart';
@@ -152,25 +150,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       _buildForgotRememberWidget(),
                       _buildButtonWidget(),
                       16.height,
-                      // SnapHelperWidget<bool>(
-                      //   future: isIqonicProduct,
-                      //   onSuccess: (data) {
-                      //     if (data) {
-                      //       return UserDemoModeScreen(
-                      //         onChanged: (email, password) {
-                      //           if (email.isNotEmpty && password.isNotEmpty) {
-                      //             emailCont.text = email;
-                      //             passwordCont.text = password;
-                      //           } else {
-                      //             emailCont.clear();
-                      //             passwordCont.clear();
-                      //           }
-                      //         },
-                      //       );
-                      //     }
-                      //     return Offstage();
-                      //   },
-                      // ),
                     ],
                   ),
                 ),
@@ -306,6 +285,7 @@ class _SignInScreenState extends State<SignInScreen> {
     };
 
     appStore.setLoading(true);
+    appStore.setPassword(passwordCont.text);
     try {
       LoginResponse res = await loginUser(request);
 
@@ -316,6 +296,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
       await setValue(USER_PASSWORD, passwordCont.text);
       await setValue(IS_REMEMBERED, isRemember);
+      print('providerId: ${res.userData!.providerId}');
       await saveUserData(res.userData!);
 
       print('object1');

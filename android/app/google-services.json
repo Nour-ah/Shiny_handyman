@@ -7,12 +7,49 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:886408554581:android:4b6b241e3929d6d64e0cdc",
+        "android_client_info": {
+          "package_name": "com.epy.providerservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886408554581-aaho0ib0hloc8624aqmjmkfhrk1rvh83.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJDs4yIQjSY8k0bXvnUK5hXE2P0hefl3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886408554581-aaho0ib0hloc8624aqmjmkfhrk1rvh83.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:886408554581:android:f66541d924dc69364e0cdc",
         "android_client_info": {
           "package_name": "com.iqonic.provider"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "886408554581-qqvdb8evp7ct14hotc1lt22lrg6hlu6k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iqonic.provider",
+            "certificate_hash": "a10c1c089a979825c9e2e9f932783121f9a52fc9"
+          }
+        },
         {
           "client_id": "886408554581-aaho0ib0hloc8624aqmjmkfhrk1rvh83.apps.googleusercontent.com",
           "client_type": 3
@@ -42,6 +79,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "886408554581-if2bposm4gg8ip52qsqr758pidvpqb28.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iqonic.servicebooking",
+            "certificate_hash": "a10c1c089a979825c9e2e9f932783121f9a52fc9"
+          }
+        },
         {
           "client_id": "886408554581-aaho0ib0hloc8624aqmjmkfhrk1rvh83.apps.googleusercontent.com",
           "client_type": 3

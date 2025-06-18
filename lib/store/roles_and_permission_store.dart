@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// store/roles_and_permission_store.dart
 
 import 'package:mobx/mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -7,10 +7,10 @@ import '../utils/app_configuration.dart';
 
 part 'roles_and_permission_store.g.dart';
 
-class RolesAndPermissionStore = _RolesAndPermissionStore with _$RolesAndPermissionStore;
+class RolesAndPermissionStore = _RolesAndPermissionStore
+    with _$RolesAndPermissionStore;
 
 abstract class _RolesAndPermissionStore with Store {
-
   @observable
   bool role = getBoolAsync(ROLE);
 
@@ -186,7 +186,7 @@ abstract class _RolesAndPermissionStore with Store {
   bool document = getBoolAsync(DOCUMENT);
 
   @observable
-  bool documentList =getBoolAsync(DOCUMENT_LIST);
+  bool documentList = getBoolAsync(DOCUMENT_LIST);
 
   @observable
   bool documentAdd = getBoolAsync(DOCUMENT_ADD);
@@ -225,7 +225,7 @@ abstract class _RolesAndPermissionStore with Store {
   bool subCategory = getBoolAsync(SUBCATEGORY);
 
   @observable
-  bool subCategoryAdd = getBoolAsync(SERVICE_ADD) ;
+  bool subCategoryAdd = getBoolAsync(SERVICE_ADD);
 
   @observable
   bool subCategoryEdit = getBoolAsync(SUBCATEGORY_EDIT);
@@ -234,7 +234,7 @@ abstract class _RolesAndPermissionStore with Store {
   bool subCategoryDelete = getBoolAsync(SUBCATEGORY_DELETE);
 
   @observable
-  bool subCategoryList =getBoolAsync(SUBCATEGORY_LIST) ;
+  bool subCategoryList = getBoolAsync(SUBCATEGORY_LIST);
 
   // HANDYMAN TYPE-RELATED KEYS
   @observable
@@ -276,7 +276,8 @@ abstract class _RolesAndPermissionStore with Store {
   bool servicePackageList = getBoolAsync(SERVICEPACKAGE_LIST);
 
   @observable
-  bool refundAndCancellationPolicy = getBoolAsync(REFUND_AND_CANCELLATION_POLICY);
+  bool refundAndCancellationPolicy =
+      getBoolAsync(REFUND_AND_CANCELLATION_POLICY);
 
   @observable
   bool blog = getBoolAsync(BLOG);
@@ -1059,7 +1060,7 @@ abstract class _RolesAndPermissionStore with Store {
   }
 
   @action
-  Future<void> setBankAdd(bool  val) async {
+  Future<void> setBankAdd(bool val) async {
     bankAdd = val;
     await setValue(BANK_ADD, val);
   }
@@ -1327,5 +1328,4 @@ abstract class _RolesAndPermissionStore with Store {
     providerDocumentDelete = val;
     await setValue(PROVIDERDOCUMENT_DELETE, val);
   }
-
 }

@@ -50,17 +50,17 @@ const STRIPE_CURRENCY_CODE = 'INR';
 
 Country defaultCountry() {
   return Country(
-    phoneCode: '91',
-    countryCode: 'IN',
-    e164Sc: 91,
+    phoneCode: '962',
+    countryCode: 'JO',
+    e164Sc: 962,
     geographic: true,
     level: 1,
-    name: 'India',
-    example: '9123456789',
-    displayName: 'India (IN) [+91]',
-    displayNameNoCountryCode: 'India (IN)',
-    e164Key: '91-IN-0',
-    fullExampleWithPlusSign: '+919123456789',
+    name: 'Jordan',
+    example: '791234567',
+    displayName: 'Jordan (JO) [+962]',
+    displayNameNoCountryCode: 'Jordan (JO)',
+    e164Key: '962-JO-0',
+    fullExampleWithPlusSign: '+962791234567',
   );
 }
 

@@ -1,3 +1,4 @@
+// provider/withdraw/withdraw_request/withdraw_request.dart
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
@@ -36,6 +37,8 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
   Future<List<BankHistory>>? future;
   List<BankHistory> bankHistoryList = [];
   BankHistory? selectedBank;
+  //
+  String? selectedWithdrawalMethod;
 
   int page = 1;
   bool isLastPage = false;
@@ -60,12 +63,11 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
         bankHistoryList = value;
       });
       bankHistoryList.forEach((value) {
-        if(bankName.isNotEmpty && bankName == value.bankName){
-             setState(() {
+        if (bankName.isNotEmpty && bankName == value.bankName) {
+          setState(() {
             selectedBank = value;
           });
-        }
-        else if (value.isDefault == 1) {
+        } else if (value.isDefault == 1) {
           setState(() {
             selectedBank = value;
           });
@@ -92,7 +94,8 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
         barrierDismissible: false,
         builder: (BuildContext context) => SuccessDialog(
           title: languages.successful,
-          description: languages.yourWithdrawalRequestHasBeenSuccessfullySubmitted,
+          description:
+              languages.yourWithdrawalRequestHasBeenSuccessfullySubmitted,
           buttonText: languages.done,
         ),
       );
@@ -122,12 +125,17 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(languages.availableBalance, style: secondaryTextStyle(size: 12)),
-                    PriceWidget(price: widget.availableBalance.validate(), color: context.primaryColor, isBoldText: true),
+                    Text(languages.availableBalance,
+                        style: secondaryTextStyle(size: 12)),
+                    PriceWidget(
+                        price: widget.availableBalance.validate(),
+                        color: context.primaryColor,
+                        isBoldText: true),
                   ],
                 ),
                 24.height,
-                Text(languages.lblEnterAmount, style: primaryTextStyle(size: 12, weight: FontWeight.w600)),
+                Text(languages.lblEnterAmount,
+                    style: primaryTextStyle(size: 12, weight: FontWeight.w600)),
                 8.height,
                 AppTextField(
                   textFieldType: TextFieldType.NUMBER,
@@ -139,7 +147,8 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
                   validator: (value) {
                     if (value?.isEmpty ?? false) {
                       return errorThisFieldRequired;
-                    } else if (num.parse(value.toString()) > num.parse(widget.availableBalance.toString())) {
+                    } else if (num.parse(value.toString()) >
+                        num.parse(widget.availableBalance.toString())) {
                       return "${languages.pleaseAddLessThanOrEqualTo} ${widget.availableBalance.validate().toPriceFormat()}";
                     }
                     return null;
@@ -148,9 +157,11 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
                 16.height,
                 Row(
                   children: [
-                    Text(languages.chooseBank, style: primaryTextStyle(size: 12, weight: FontWeight.w600)),
+                    Text(languages.chooseBank,
+                        style: primaryTextStyle(
+                            size: 12, weight: FontWeight.w600)),
                     Spacer(),
-                     TextButton(
+                    TextButton(
                       onPressed: () {
                         AddBankScreen().launch(context).then((value) {
                           if (value.isNotEmpty) {
@@ -161,7 +172,8 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
                           }
                         });
                       },
-                      child: Text(languages.addBank, style: boldTextStyle(size: 12, color: primaryColor)),
+                      child: Text(languages.addBank,
+                          style: boldTextStyle(size: 12, color: primaryColor)),
                     ),
                   ],
                 ),
@@ -180,7 +192,10 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
                   items: bankHistoryList.map((BankHistory e) {
                     return DropdownMenuItem<BankHistory>(
                       value: e,
-                      child: Text(e.bankName.validate(), style: primaryTextStyle(), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      child: Text(e.bankName.validate(),
+                          style: primaryTextStyle(),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis),
                     );
                   }).toList(),
                   onChanged: (BankHistory? value) async {
@@ -209,10 +224,11 @@ class _WithdrawRequestState extends State<WithdrawRequest> {
               ],
             ).paddingSymmetric(horizontal: 16, vertical: 16),
           ),
-          Observer(builder: (_) => LoaderWidget().center().visible(appStore.isLoading)),
+          Observer(
+              builder: (_) =>
+                  LoaderWidget().center().visible(appStore.isLoading)),
         ],
       ),
     );
   }
 }
-
